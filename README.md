@@ -4,7 +4,7 @@
 2. `source venv/bin/activate`
 3. `python3 -m pip install -r requirements.txt`
 
-Then make a JSON file with your students' names and an empty quiz dictionary. For instance,
+Then make a `students.json` with your students' names and an empty quiz dictionary. For instance,
 
 ```
 {
