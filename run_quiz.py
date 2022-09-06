@@ -12,12 +12,18 @@ targets.extend(range(21))
 class Database(object):
     def __init__(self, db_path):
         self.db_path = db_path
-        with open(db_path, 'r') as f:
-            self.db = json.load(f)
+        try:
+            with open(db_path, 'r') as f:
+                self.db = json.load(f)
+        except FileNotFoundError:
+            self.db = {'students': [], 'quizzes': {}}
 
     @property
     def students(self):
         return self.db['students']
+
+    def new_student(self, student):
+        self.db['students'].append(student)
 
     @property
     def dates(self):
@@ -38,6 +44,8 @@ class Database(object):
             }
         else:
             self.db['quizzes'][today][student] = {x:False for x in targets}
+
+        return True
 
     def generate_report(self):
         success_dicts = {}
@@ -94,7 +102,7 @@ def quiz(student):
             db.save_db()
             return 'OK', 200
 
-@app.route('/api/<action>', methods = ['GET', 'POST'])
+@app.route('/api/<action>', methods = ['POST'])
 def api(action):
     if action == 'make-csv':
         csv_dicts = []
