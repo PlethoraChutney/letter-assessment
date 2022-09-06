@@ -11,21 +11,61 @@ function clearHover() {
 const students = Object.keys(studentSuccess);
 students.sort();
 
-const headers = ['Student', ...Object.keys(studentSuccess[students[0]]['results'])]
+const headers = ['Student', ...Object.keys(studentSuccess[students[0]]['results']), 'Student']
 
 for (let header of headers) {
     let newHeader = document.createElement('p');
     newHeader.innerHTML = header;
+    newHeader.classList.add('header');
+    newHeader.setAttribute('data-target', header);
+
+    newHeader.addEventListener('mouseover', () => {
+        for (let square of document.querySelectorAll('div.grid-square')) {
+            if (square.getAttribute('data-target') !== newHeader.getAttribute('data-target')) {
+                square.classList.add('lowlight');
+            } else {
+                square.classList.remove('lowlight');
+            }
+        }
+    })
+
+    newHeader.addEventListener('mouseleave', () => {
+        for (let square of document.querySelectorAll('div.grid-square')) {
+            square.classList.remove('lowlight');
+        }
+    })
+    
+
     dashboard.appendChild(newHeader);
 }
 
 for (let student of students) {
     let studentNameP = document.createElement('p');
     studentNameP.innerHTML = student;
+    studentNameP.id = `student-name-${student}`
+    studentNameP.setAttribute('data-student', student);
+
+    studentNameP.addEventListener('mouseover', () => {
+        for (let square of document.querySelectorAll('div.grid-square')) {
+            if (square.getAttribute('data-student') !== studentNameP.getAttribute('data-student')) {
+                square.classList.add('lowlight');
+            } else {
+                square.classList.remove('lowlight');
+            }
+        }
+    })
+
+    studentNameP.addEventListener('mouseleave', () => {
+        for (let square of document.querySelectorAll('div.grid-square')) {
+            square.classList.remove('lowlight');
+        }
+    }) 
+
     dashboard.appendChild(studentNameP);
 
     for (let [target, result] of Object.entries(studentSuccess[student]['results'])) {
         let newGridSquare = document.createElement('div');
+        newGridSquare.classList.add('grid-square');
 
         newGridSquare.setAttribute('data-student', student);
         newGridSquare.setAttribute('data-date', studentSuccess[student]['date']);
@@ -76,4 +116,25 @@ for (let student of students) {
 
         dashboard.appendChild(newGridSquare);
     }
+
+    let rightStudent = document.querySelector(`#student-name-${student}`).cloneNode(deep = true);
+    rightStudent.id = `student-name${student}-right`;
+
+    rightStudent.addEventListener('mouseover', () => {
+        for (let square of document.querySelectorAll('div.grid-square')) {
+            if (square.getAttribute('data-student') !== rightStudent.getAttribute('data-student')) {
+                square.classList.add('lowlight');
+            } else {
+                square.classList.remove('lowlight');
+            }
+        }
+    })
+
+    rightStudent.addEventListener('mouseleave', () => {
+        for (let square of document.querySelectorAll('div.grid-square')) {
+            square.classList.remove('lowlight');
+        }
+    }) 
+
+    dashboard.appendChild(rightStudent);
 }

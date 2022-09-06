@@ -6,7 +6,7 @@ h1 {
 
 #dashboard {
     display: grid;
-    grid-template-columns: 100px repeat(73, 20px);
+    grid-template-columns: 75px repeat(73, 15px) 75px;
     width: max-content;
     margin: auto;
     font-family: sans-serif;
@@ -17,6 +17,15 @@ h1 {
     text-align: center;
     margin: 0;
     padding: 7px 0;
+    user-select: none;
+}
+
+p.header {
+    font-size: 10pt;
+}
+
+.lowlight {
+    opacity: 0.1;
 }
 
 #dashboard > div {
