@@ -25,6 +25,7 @@ for (let header of headers) {
                 square.classList.add('lowlight');
             } else {
                 square.classList.remove('lowlight');
+                square.classList.add('wider');
             }
         }
     })
@@ -32,6 +33,7 @@ for (let header of headers) {
     newHeader.addEventListener('mouseleave', () => {
         for (let square of document.querySelectorAll('div.grid-square')) {
             square.classList.remove('lowlight');
+            square.classList.remove('wider');
         }
     })
     

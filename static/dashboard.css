@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
 h1 {
     width: max-content;
     margin: 20px auto;
-    font-family: sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 #dashboard {
@@ -9,7 +11,7 @@ h1 {
     grid-template-columns: 75px repeat(73, 15px) 75px;
     width: max-content;
     margin: auto;
-    font-family: sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 #dashboard > p {
@@ -18,6 +20,10 @@ h1 {
     margin: 0;
     padding: 7px 0;
     user-select: none;
+}
+
+p {
+    font-family: 'Montserrat', sans-serif;
 }
 
 p.header {
@@ -33,6 +39,12 @@ p.header {
     height: 100%;
     background: #1b9e77;
     box-sizing: border-box;
+}
+
+#dashboard > div.wider {
+    width: 45px;
+    margin-left: -15px;
+    z-index: 100;
 }
 
 #dashboard > div.right-border {

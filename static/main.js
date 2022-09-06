@@ -90,6 +90,7 @@ function advanceText() {
                     quizComplete = true;
                     bigText.innerHTML = 'Finished.';
                     bigText.classList.add('finished');
+                    bigText.classList.remove('is-a-number');
                     targetType.innerHTML = '';
                     sendResults();
                 }

@@ -32,8 +32,13 @@ p#quiz-target {
     line-height: 1;
 }
 
+p#quiz-target.is-a-number {
+    color: blue;
+}
+
 p#quiz-target.finished {
     font-size: 256pt;
+    font-family: 'Montserrat', sans-serif;
 }
 
 p#quiz-target.arial {
