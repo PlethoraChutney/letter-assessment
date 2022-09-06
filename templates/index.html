@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>New Quiz</title>
+</head>
+<body>
+    <div class="h-flex">
+        <div class="v-flex">
+            <h1>New quiz for which student?</h1>
+            {% for student in students %}
+                <a href="/quiz/{{student}}">{{student}}</a>
+            {% endfor %}
+        </div>
+        <div class="v-flex">
+            <h1>Or:</h1>
+            <a href="/api/make-csv">Download CSV data</a>
+            <a href="/student-dashboard">Student dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

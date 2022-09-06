@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+
+import json
+from datetime import date
+from flask import Flask, render_template, request, make_response
+from string import ascii_letters
+import pandas as pd
+
+targets = list(ascii_letters)
+targets.extend(range(21))
+
+class Database(object):
+    def __init__(self, db_path):
+        self.db_path = db_path
+        with open(db_path, 'r') as f:
+            self.db = json.load(f)
+
+    @property
+    def students(self):
+        return self.db['students']
+
+    @property
+    def dates(self):
+        return self.db['quizzes'].keys()
+
+    def save_db(self):
+        with open(self.db_path, 'w') as f:
+            json.dump(self.db, f)
+
+    def new_quiz(self, student):
+        if student not in self.students:
+            return False
+        
+        today = str(date.today())
+        if today not in self.dates:
+            self.db['quizzes'][today] = {
+                student: {x: False for x in targets}
+            }
+        else:
+            self.db['quizzes'][today][student] = {x:False for x in targets}
+
+app = Flask(
+    __name__,
+    template_folder='templates'
+)
+
+db = Database('students.json')
+
+@app.route('/', methods = ['GET'])
+def index():
+    return render_template('index.html', students = db.students)
+
+@app.route('/quiz/<student>', methods = ['GET', 'POST'])
+def quiz(student):
+    if request.method == 'GET':
+        db.new_quiz(student)
+        return render_template('quiz.html', student = student)
+    elif request.method == 'POST':
+        today = str(date.today())
+        rq = request.get_json()
+        if rq['action'] == 'quiz_complete':
+            for section in [rq['upper'], rq['lower']]:
+                for letter, correct in section.items():
+                    db.db['quizzes'][today][rq['student']][letter] = correct
+            
+            for num, correct in rq['numbers'].items():
+                num = int(num[1:])
+                db.db['quizzes'][today][rq['student']][num] = correct
+
+            db.save_db()
+            return 'OK', 200
+
+@app.route('/api/<action>', methods = ['GET', 'POST'])
+def api(action):
+    if action == 'make-csv':
+        csv_dicts = []
+        for date, quizzes in db.db['quizzes'].items():
+            for student, quiz in quizzes.items():
+                for target, results in quiz.items():
+                    for category, success in results.items():
+                        csv_dicts.append({
+                            'date': date,
+                            'student': student,
+                            'target': target,
+                            'category': category,
+                            'success': success
+                        })
+
+        response = make_response(pd.DataFrame(csv_dicts).to_csv(index = False))
+        response.headers['Content-Disposition'] = 'attachment; filename=quiz-results.csv'
+        response.headers['Content-Type'] = 'text/csv'
+        return response
