@@ -9,17 +9,20 @@
 </head>
 <body>
     <div class="h-flex">
-        <div class="v-flex">
-            <h1>New quiz for which student?</h1>
-            {% for student in students %}
-                <a href="/quiz/{{student}}">{{student}}</a>
-            {% endfor %}
+        <div class="v-flex" id="student-list-holder">
         </div>
         <div class="v-flex">
             <h1>Or:</h1>
+            <a href="" onclick="newStudent()">Add a student</a>
+            <a href="" onclick="deleteStudent()">Remove a student</a>
             <a href="/api/make-csv">Download CSV data</a>
             <a href="/student-dashboard">Student dashboard</a>
         </div>
     </div>
 </body>
+
+<script>
+    const studentList = {{students|tojson}};
+</script>
+<script src="/static/db_manage.js"></script>
 </html>

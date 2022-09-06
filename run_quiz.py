@@ -23,7 +23,18 @@ class Database(object):
         return self.db['students']
 
     def new_student(self, student):
+        if student in self.db['students']:
+            return 'Student in list'
         self.db['students'].append(student)
+        self.save_db()
+        return 'Success'
+
+    def delete_student(self, student):
+        if student not in self.db['students']:
+            return 'Student not in list'
+        self.db['students'].remove(student)
+        self.save_db()
+        return 'Success'
 
     @property
     def dates(self):
@@ -53,6 +64,9 @@ class Database(object):
 
         for date, quizzes in self.db['quizzes'].items():
             for student in quizzes.keys():
+                if student not in self.students:
+                    continue
+
                 if student not in student_dates:
                     student_dates[student] = [date]
                 else:
@@ -122,6 +136,16 @@ def api(action):
         response.headers['Content-Disposition'] = 'attachment; filename=quiz-results.csv'
         response.headers['Content-Type'] = 'text/csv'
         return response
+
+    elif action == 'add-student':
+        rq = request.get_json()
+        success = db.new_student(rq['student'])
+        return success, 200
+
+    elif action == 'delete-student':
+        rq = request.get_json()
+        success = db.delete_student(rq['student'])
+        return success, 200
 
 @app.route('/student-dashboard', methods = ['GET'])
 def dashboard():
