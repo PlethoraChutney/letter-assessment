@@ -56,7 +56,9 @@ class Database(object):
 
         for student, date in student_dates.items():
             quiz = self.db['quizzes'][date][student]
-            success_dicts[student] = quiz
+            success_dicts[student] = {}
+            success_dicts[student]['date'] = date
+            success_dicts[student]['results'] = quiz
 
         return(success_dicts)
 

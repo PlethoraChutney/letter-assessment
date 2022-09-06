@@ -10,7 +10,7 @@ function clearHover() {
 // studentSuccess defined and passed in to the Flask template
 const students = Object.keys(studentSuccess);
 
-const headers = ['Student', ...Object.keys(studentSuccess[students[0]])]
+const headers = ['Student', ...Object.keys(studentSuccess[students[0]]['results'])]
 
 for (let header of headers) {
     let newHeader = document.createElement('p');
@@ -23,10 +23,11 @@ for (let student of students) {
     studentNameP.innerHTML = student;
     dashboard.appendChild(studentNameP);
 
-    for (let [target, result] of Object.entries(studentSuccess[student])) {
+    for (let [target, result] of Object.entries(studentSuccess[student]['results'])) {
         let newGridSquare = document.createElement('div');
 
         newGridSquare.setAttribute('data-student', student);
+        newGridSquare.setAttribute('data-date', studentSuccess[student]['date']);
         newGridSquare.setAttribute('data-target', target);
         newGridSquare.setAttribute('data-name', result.name ? 'Correct' : 'Incorrect');
 
@@ -47,7 +48,7 @@ for (let student of students) {
         newGridSquare.addEventListener('mouseover', event => {
             clearHover();
 
-            for (dataType of ['Student', 'Target', 'Name', 'Sound']) {
+            for (dataType of ['Student', 'Date', 'Target', 'Name', 'Sound']) {
                 let dataName = `data-${dataType.toLowerCase()}`;
                 if (newGridSquare.hasAttribute(dataName)) {
                     let newP = document.createElement('p');
