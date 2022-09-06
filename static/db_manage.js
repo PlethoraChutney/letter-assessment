@@ -44,10 +44,11 @@ function newStudent() {
 
     sendRequest('/api/add-student', {
         'student': studentName
+    }).then(() => {
+        studentList.push(studentName);
+        refreshList();
     });
 
-    studentList.push(studentName);
-    refreshList();
 }
 
 function deleteStudent() {
@@ -66,8 +67,9 @@ function deleteStudent() {
 
     sendRequest('/api/delete-student', {
         'student': studentName
+    }).then(() => {
+        studentList.splice(studentList.indexOf(studentName), 1);
+        refreshList();
     });
 
-    studentList.splice(studentList.indexOf(studentName), 1);
-    refreshList();
 }

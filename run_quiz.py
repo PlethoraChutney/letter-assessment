@@ -116,7 +116,7 @@ def quiz(student):
             db.save_db()
             return 'OK', 200
 
-@app.route('/api/<action>', methods = ['POST'])
+@app.route('/api/<action>', methods = ['GET', 'POST'])
 def api(action):
     if action == 'make-csv':
         csv_dicts = []
@@ -138,14 +138,20 @@ def api(action):
         return response
 
     elif action == 'add-student':
+        print('Adding student')
         rq = request.get_json()
         success = db.new_student(rq['student'])
-        return success, 200
+        return 'OK', 200
 
     elif action == 'delete-student':
+        print('Deleting student')
         rq = request.get_json()
         success = db.delete_student(rq['student'])
-        return success, 200
+        return 'OK', 200
+
+    else:
+        print('bad request')
+        print(request.get_json())
 
 @app.route('/student-dashboard', methods = ['GET'])
 def dashboard():
