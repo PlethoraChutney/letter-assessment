@@ -29,6 +29,11 @@ for (let student of students) {
         newGridSquare.setAttribute('data-student', student);
         newGridSquare.setAttribute('data-target', target);
         newGridSquare.setAttribute('data-name', result.name ? 'Correct' : 'Incorrect');
+
+        if (target == 20 | target === 'z') {
+            newGridSquare.classList.add('right-border');
+        }
+
         if (!result.name) {
             newGridSquare.classList.add('missing-name');
         }
