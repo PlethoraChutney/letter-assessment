@@ -39,6 +39,28 @@ class Database(object):
         else:
             self.db['quizzes'][today][student] = {x:False for x in targets}
 
+    def generate_report(self):
+        success_dicts = {}
+        student_dates = {}
+
+        for date, quizzes in self.db['quizzes'].items():
+            for student in quizzes.keys():
+                if student not in student_dates:
+                    student_dates[student] = [date]
+                else:
+                    student_dates[student].append(date)
+
+        for student in student_dates:
+            student_dates[student].sort()
+            student_dates[student] = student_dates[student][-1]
+
+        for student, date in student_dates.items():
+            quiz = self.db['quizzes'][date][student]
+            success_dicts[student] = quiz
+
+        return(success_dicts)
+
+
 app = Flask(
     __name__,
     template_folder='templates'
@@ -90,3 +112,8 @@ def api(action):
         response.headers['Content-Disposition'] = 'attachment; filename=quiz-results.csv'
         response.headers['Content-Type'] = 'text/csv'
         return response
+
+@app.route('/student-dashboard', methods = ['GET'])
+def dashboard():
+    success_strings = db.generate_report()
+    return render_template('dashboard.html', success_strings = json.dumps(success_strings))

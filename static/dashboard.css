@@ -1,0 +1,86 @@
+html {
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    width: max-content;
+    margin: 20px auto;
+    font-family: sans-serif;
+}
+
+#dashboard {
+    display: grid;
+    grid-template-columns: 100px repeat(73, 20px);
+    width: max-content;
+    margin: auto;
+    font-family: sans-serif;
+}
+
+#dashboard > p {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 7px 0;
+}
+
+#dashboard > div {
+    width: 100%;
+    height: 100%;
+    background: #1b9e77;
+    box-sizing: border-box;
+}
+
+#dashboard > div:hover {
+    border: 1px solid black;
+}
+
+#dashboard > div.missing-name {
+    background-color: #d95f02;
+}
+
+#dashboard > div.missing-sound {
+    background-color: #7570b3;
+}
+
+#dashboard > div.missing-sound.missing-name {
+    background-color: #e7298a;
+}
+
+div#hover-container {
+    position: absolute;
+    border: 1px solid black;
+    font-family: sans-serif;
+    background-color: white;
+    padding: 0px 10px;
+    margin: 20px;
+}
+
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+
+div.h-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+div#examples > div > div {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    margin: auto;
+}

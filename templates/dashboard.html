@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/dashboard.css">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Most Recent Student Assessment</h1>
+    <div class="h-flex" id="examples">
+        <div><div style="background-color: #1b9e77;"></div><p>All Correct</p></div>
+        <div><div style="background-color: #d95f02;"></div><p>Missed Name</p></div>
+        <div><div style="background-color: #7570b3;"></div><p>Missed Sound</p></div>
+        <div><div style="background-color: #e7298a;"></div><p>Missed Both</p></div>
+    </div>
+    <div class="hidden" id="hover-container"></div>
+    <div id="dashboard">
+        
+    </div>
+</body>
+
+<script>
+    const studentSuccess = JSON.parse({{success_strings|tojson}});
+</script>
+<script src="/static/draw_graph.js"></script>
+</html>
