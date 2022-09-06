@@ -99,6 +99,11 @@ function advanceText() {
             if (lowerCaseKeys.length > 0) {
                 currValue = lowerCaseKeys.pop();
                 bigText.innerHTML = currValue;
+                if (currValue === 'e') {
+                    bigText.classList.add('arial');
+                } else {
+                    bigText.classList.remove('arial');
+                }
             } else {
                 bigText.classList.add('is-a-number');
                 currSet = 'number';
