@@ -27,9 +27,13 @@ div#container {
 
 p#quiz-target {
     font-family: 'Comic Neue', sans-serif;
-    font-size: 256pt;
+    font-size: 80vh;
     margin: auto auto;
     line-height: 1;
+}
+
+p#quiz-target.finished {
+    font-size: 256pt;
 }
 
 p#quiz-target.arial {

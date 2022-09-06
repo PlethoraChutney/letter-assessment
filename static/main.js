@@ -89,6 +89,7 @@ function advanceText() {
                 if (!quizComplete) {
                     quizComplete = true;
                     bigText.innerHTML = 'Finished.';
+                    bigText.classList.add('finished');
                     targetType.innerHTML = '';
                     sendResults();
                 }

@@ -13,6 +13,7 @@ div.v-flex {
     width: max-content;
     margin: auto;
     padding-top: 10px;
+    height: 100%;
 }
 
 div.h-flex {
@@ -20,6 +21,9 @@ div.h-flex {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    max-width: 1000px;
+    height: 100px;
+    margin: auto;
 }
 
 a {

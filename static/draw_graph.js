@@ -9,6 +9,7 @@ function clearHover() {
 
 // studentSuccess defined and passed in to the Flask template
 const students = Object.keys(studentSuccess);
+students.sort();
 
 const headers = ['Student', ...Object.keys(studentSuccess[students[0]]['results'])]
 
