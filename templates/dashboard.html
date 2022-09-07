@@ -10,11 +10,21 @@
 <body>
     <h1>Most Recent Student Assessment</h1>
     <div class="h-flex" id="examples">
-        <div><div style="background-color: #1b9e77;"></div><p>All Correct</p></div>
-        <div><div style="background-color: #d95f02;"></div><p>Missed Name</p></div>
-        <div><div style="background-color: #7570b3;"></div><p>Missed Sound</p></div>
-        <div><div style="background-color: #e7298a;"></div><p>Missed Both</p></div>
-        <div><div style="background-color: #fb9a99;"></div><p>Misread Word</p></div>
+        <div>
+            <div class="example-square" data-example-of="all-correct" style="background-color: #1b9e77;"></div><p>All Correct</p>
+        </div>
+        <div>
+            <div class="example-square" data-example-of="missing-name" style="background-color: #d95f02;"></div><p>Missed Name</p>
+        </div>
+        <div>
+            <div class="example-square" data-example-of="missing-sound" style="background-color: #7570b3;"></div><p>Missed Sound</p>
+        </div>
+        <div>
+            <div class="example-square" data-example-of="missing-sound,missing-name" style="background-color: #e7298a;"></div><p>Missed Both</p>
+        </div>
+        <div>
+            <div class="example-square" data-example-of="missing-read" style="background-color: #fb9a99;"></div><p>Misread Word</p>
+        </div>
     </div>
     <div class="hidden" id="hover-container"></div>
     <div id="dashboard">

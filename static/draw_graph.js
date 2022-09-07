@@ -90,21 +90,28 @@ for (let student of students) {
             newGridSquare.classList.add('right-border');
         }
 
+        let allCorrect = true;
         if ('name' in result & !result.name) {
             newGridSquare.classList.add('missing-name');
+            allCorrect = false;
         }
         if ('sound' in result) {
             newGridSquare.setAttribute('data-sound', result.sound ? 'Correct' : 'Incorrect');
             if (!result.sound) {
                 newGridSquare.classList.add('missing-sound');
+                allCorrect = false;
             }
         }
-
         if ('read' in result) {
             newGridSquare.setAttribute('data-read', result.read ? 'Correct' : 'Incorrect');
             if (!result.read) {
                 newGridSquare.classList.add('missing-read');
+                allCorrect = false;
             }
+        }
+
+        if (allCorrect) {
+            newGridSquare.classList.add('all-correct');
         }
 
         newGridSquare.addEventListener('mouseover', event => {
@@ -158,4 +165,26 @@ for (let student of students) {
     }) 
 
     dashboard.appendChild(rightStudent);
+
+    const exampleSquares = document.querySelectorAll('div.example-square');
+
+    for (let square of exampleSquares) {
+        const squareType = square.getAttribute('data-example-of').split(',');
+
+        square.addEventListener('mouseover', () => {
+            for (let cell of document.querySelectorAll('div.grid-square')) {
+                for (let type of squareType) {
+                    if (!cell.classList.contains(type)) {
+                        cell.classList.add('lowlight');
+                    }
+                }
+            }
+        })
+
+        square.addEventListener('mouseleave', () => {
+            for (let cell of document.querySelectorAll('div.grid-square')) {
+                cell.classList.remove('lowlight');
+            }
+        })
+    }
 }
