@@ -47,7 +47,8 @@ for (let i of integers) {
     numbers[`n${i}`] = {'name': false};
 }
 
-let wordEntries = shuffle(['cat', 'flip', 'think', 'because']);
+// reverse word order, because we use pop() from the back
+let wordEntries = ['because', 'think', 'flip', 'cat'];
 for (let word of wordEntries) {
     words[word] = {'read': false};
 }
@@ -60,8 +61,13 @@ let wordKeys = Object.keys(words);
 const bigText = document.querySelector('#quiz-target');
 const targetType = document.querySelector('#target-type');
 
+// track which set of targets we're using
 let currSet = 'upper';
+
+// what feature of the question we're targeting
 let currTarget = 'name';
+
+// what target is displayed
 let currValue = upperCaseKeys.pop();
 bigText.innerHTML = currValue;
 targetType.innerHTML = 'Letter Name';
