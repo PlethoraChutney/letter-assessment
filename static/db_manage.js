@@ -42,13 +42,14 @@ refreshList();
 function newStudent() {
     let studentName = prompt("New student's name:");
 
-    sendRequest('/api/add-student', {
-        'student': studentName
-    }).then(() => {
-        studentList.push(studentName);
-        refreshList();
-    });
-
+    if (studentName.length > 0) {
+        sendRequest('/api/add-student', {
+            'student': studentName
+        }).then(() => {
+            studentList.push(studentName);
+            refreshList();
+        });
+    }
 }
 
 function deleteStudent() {
