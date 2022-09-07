@@ -127,8 +127,13 @@ function advanceText() {
                 currValue = lowerCaseKeys.pop();
                 bigText.innerHTML = currValue;
                 if (currValue === 'e') {
+                    bigText.classList.remove('other-handwritten');
                     bigText.classList.add('arial');
+                } else if (currValue === 'q') {
+                    bigText.classList.remove('arial');
+                    bigText.classList.add('other-handwritten');
                 } else {
+                    bigText.classList.remove('other-handwritten');
                     bigText.classList.remove('arial');
                 }
             } else {
