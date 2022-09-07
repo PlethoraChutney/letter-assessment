@@ -11,11 +11,21 @@ function clearHover() {
 const students = Object.keys(studentSuccess);
 students.sort();
 
-const headers = ['Student', ...Object.keys(studentSuccess[students[0]]['results']), 'Student']
+const headers = ['Student', ...Object.keys(studentSuccess[students[0]]['results']), 'Student'];
+const wordConversion = {
+    'cat': '😸',
+    'flip': '🔄',
+    'think': '🧠',
+    'because': '⚙️'
+}
 
 for (let header of headers) {
     let newHeader = document.createElement('p');
-    newHeader.innerHTML = header;
+    if (['cat', 'flip', 'think', 'because'].includes(header)) {
+        newHeader.innerHTML = wordConversion[header];
+    } else {
+        newHeader.innerHTML = header;
+    }
     newHeader.classList.add('header');
     newHeader.setAttribute('data-target', header);
 
@@ -72,13 +82,15 @@ for (let student of students) {
         newGridSquare.setAttribute('data-student', student);
         newGridSquare.setAttribute('data-date', studentSuccess[student]['date']);
         newGridSquare.setAttribute('data-target', target);
-        newGridSquare.setAttribute('data-name', result.name ? 'Correct' : 'Incorrect');
+        if ('name' in result) {
+            newGridSquare.setAttribute('data-name', result.name ? 'Correct' : 'Incorrect');
+        }
 
         if (target == 20 | target === 'z') {
             newGridSquare.classList.add('right-border');
         }
 
-        if (!result.name) {
+        if ('name' in result & !result.name) {
             newGridSquare.classList.add('missing-name');
         }
         if ('sound' in result) {
@@ -88,10 +100,17 @@ for (let student of students) {
             }
         }
 
+        if ('read' in result) {
+            newGridSquare.setAttribute('data-read', result.read ? 'Correct' : 'Incorrect');
+            if (!result.read) {
+                newGridSquare.classList.add('missing-read');
+            }
+        }
+
         newGridSquare.addEventListener('mouseover', event => {
             clearHover();
 
-            for (dataType of ['Student', 'Date', 'Target', 'Name', 'Sound']) {
+            for (dataType of ['Student', 'Date', 'Target', 'Name', 'Sound', 'Read']) {
                 let dataName = `data-${dataType.toLowerCase()}`;
                 if (newGridSquare.hasAttribute(dataName)) {
                     let newP = document.createElement('p');

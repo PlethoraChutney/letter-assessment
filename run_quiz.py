@@ -8,6 +8,7 @@ import pandas as pd
 
 targets = list(ascii_letters)
 targets.extend(range(21))
+targets.extend(['cat', 'flip', 'think', 'because'])
 
 class Database(object):
     def __init__(self, db_path):
@@ -112,6 +113,9 @@ def quiz(student):
             for num, correct in rq['numbers'].items():
                 num = int(num[1:])
                 db.db['quizzes'][today][rq['student']][num] = correct
+
+            for word, correct in rq['words'].items():
+                db.db['quizzes'][today][rq['student']][word] = correct
 
             db.save_db()
             return 'OK', 200

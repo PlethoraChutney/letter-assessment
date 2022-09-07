@@ -17,6 +17,7 @@ const student = document.querySelector('#student-name').innerText;
 let upperCase = {};
 let lowerCase = {};
 let numbers = {};
+let words = {};
 let quizComplete = false;
 
 const letters = Array.from('abcdefghijklmnopqrstuvwxyz');
@@ -46,9 +47,15 @@ for (let i of integers) {
     numbers[`n${i}`] = {'name': false};
 }
 
+let wordEntries = shuffle(['cat', 'flip', 'think', 'because']);
+for (let word of wordEntries) {
+    words[word] = {'read': false};
+}
+
 let upperCaseKeys = Object.keys(upperCase);
 let lowerCaseKeys = Object.keys(lowerCase);
 let numberKeys = Object.keys(numbers);
+let wordKeys = Object.keys(words);
 
 const bigText = document.querySelector('#quiz-target');
 const targetType = document.querySelector('#target-type');
@@ -79,21 +86,39 @@ function markSound(isCorrect) {
     }
 }
 
+function markRead(isCorrect) {
+    words[currValue]['read'] = isCorrect;
+}
+
 function advanceText() {
     switch (currSet) {
-        case 'number':
-            if (numberKeys.length > 0) {
-                currValue = numberKeys.pop().replace('n', '');
+        case 'words':
+            if (wordKeys.length > 0) {
+                currValue = wordKeys.pop();
                 bigText.innerHTML = currValue;
             } else {
                 if (!quizComplete) {
                     quizComplete = true;
                     bigText.innerHTML = 'Finished.';
                     bigText.classList.add('finished');
-                    bigText.classList.remove('is-a-number');
+                    bigText.classList.remove('is-a-word');
                     targetType.innerHTML = '';
                     sendResults();
                 }
+            }
+            break;
+        case 'number':
+            if (numberKeys.length > 0) {
+                currValue = numberKeys.pop().replace('n', '');
+                bigText.innerHTML = currValue;
+            } else {
+                currSet = 'words';
+                bigText.classList.remove('is-a-number');
+                bigText.classList.add('is-a-word');
+                currTarget = 'read';
+                targetType.innerHTML = 'Read';
+                currValue = wordKeys.pop();
+                bigText.innerHTML = currValue;
             }
             break;
 
@@ -137,10 +162,13 @@ function markAndAdvance(isCorrect) {
         } else {
             advanceText();
         }
-    } else {
+    } else if (currTarget === 'sound') {
         markSound(isCorrect);
         currTarget = 'name';
         targetType.innerHTML = 'Letter Name';
+        advanceText();
+    } else if (currTarget === 'read') {
+        markRead(isCorrect);
         advanceText();
     }
 }
@@ -162,7 +190,8 @@ function sendResults() {
         'student': student,
         'upper': upperCase,
         'lower': lowerCase,
-        'numbers': numbers
+        'numbers': numbers,
+        'words': words
     });
 }
 

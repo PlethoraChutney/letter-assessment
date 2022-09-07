@@ -8,7 +8,7 @@ h1 {
 
 #dashboard {
     display: grid;
-    grid-template-columns: 75px repeat(73, 15px) 75px;
+    grid-template-columns: 75px repeat(77, 15px) 75px;
     width: max-content;
     margin: auto;
     font-family: 'Montserrat', sans-serif;
@@ -61,6 +61,10 @@ p.header {
 
 #dashboard > div.missing-sound {
     background-color: #7570b3;
+}
+
+#dashboard > div.missing-read {
+    background-color: #fb9a99;
 }
 
 #dashboard > div.missing-sound.missing-name {

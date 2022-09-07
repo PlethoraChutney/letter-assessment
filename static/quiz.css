@@ -27,7 +27,7 @@ div#container {
 
 p#quiz-target {
     font-family: 'Comic Neue', sans-serif;
-    font-size: 80vh;
+    font-size: 256pt;
     margin: auto auto;
     line-height: 1;
 }
@@ -36,8 +36,11 @@ p#quiz-target.is-a-number {
     color: blue;
 }
 
+p#quiz-target.is-a-word {
+    color: green;
+}
+
 p#quiz-target.finished {
-    font-size: 256pt;
     font-family: 'Montserrat', sans-serif;
 }
 
