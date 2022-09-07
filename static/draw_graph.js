@@ -120,14 +120,14 @@ for (let student of students) {
             }
 
             hoverContainer.style.top = event.pageY + 'px';
-            hoverContainer.style.right = window.screen.width - event.pageX + 'px';
+            hoverContainer.style.right = window.innerWidth - event.pageX + 'px';
 
             hoverContainer.classList.remove('hidden');
         })
 
         newGridSquare.addEventListener('mousemove', (event) => {
             hoverContainer.style.top = event.pageY + 'px';
-            hoverContainer.style.right = window.screen.width - event.pageX + 'px';
+            hoverContainer.style.right = window.innerWidth - event.pageX + 'px';
         })
 
         newGridSquare.addEventListener('mouseleave', () => {
