@@ -127,14 +127,18 @@ def api(action):
         for date, quizzes in db.db['quizzes'].items():
             for student, quiz in quizzes.items():
                 for target, results in quiz.items():
-                    for category, success in results.items():
-                        csv_dicts.append({
-                            'date': date,
-                            'student': student,
-                            'target': target,
-                            'category': category,
-                            'success': success
-                        })
+                    try:
+                        for category, success in results.items():
+                            csv_dicts.append({
+                                'date': date,
+                                'student': student,
+                                'target': target,
+                                'category': category,
+                                'success': success
+                            })
+                    except AttributeError:
+                        print('Attribute error when generating csv')
+                        continue
 
         response = make_response(pd.DataFrame(csv_dicts).to_csv(index = False))
         response.headers['Content-Disposition'] = 'attachment; filename=quiz-results.csv'
