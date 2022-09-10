@@ -107,9 +107,14 @@ class Database(object):
         seating_chart = self.db.get('seating_chart')
 
         if seating_chart is None:
-            seating_chart = {x:'drawer' for x in self.students}
+            seating_chart = {x:'drag-holder' for x in self.students}
 
         return seating_chart
+
+    def update_seating_chart(self, chart):
+        self.db['seating_chart'] = chart
+        self.save_db()
+        return 'OK'
 
 
 app = Flask(
@@ -192,6 +197,11 @@ def api(action):
 
     elif action == 'student-seats':
         return db.get_seating_chart(), 200, {'ContentType': 'application/json'}
+
+    elif action == 'update-seating-chart':
+        new_chart = request.get_json()
+        db.update_seating_chart(new_chart)
+        return 'OK', 200
 
     else:
         print('bad request')
