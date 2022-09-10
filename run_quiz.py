@@ -85,6 +85,24 @@ class Database(object):
 
         return(success_dicts)
 
+    def update_record(self, rec):
+        target = rec['target']
+        assessment = rec['assess']
+
+        if target in ['cat', 'flip', 'think', 'because'] and assessment == 'name':
+            assessment = 'read'
+
+        print(target)
+        print(assessment)
+        print(self.db['quizzes'][rec['date']][rec['student']][target])
+
+        if assessment in self.db['quizzes'][rec['date']][rec['student']][target]:
+            self.db['quizzes'][rec['date']][rec['student']][target][assessment] = rec['correct']
+            self.save_db()
+            return True
+        else:
+            return False
+
 
 app = Flask(
     __name__,
@@ -149,13 +167,20 @@ def api(action):
         print('Adding student')
         rq = request.get_json()
         success = db.new_student(rq['student'])
-        return 'OK', 200
+        return 'success' if success else 'failure', 200
 
     elif action == 'delete-student':
         print('Deleting student')
         rq = request.get_json()
         success = db.delete_student(rq['student'])
-        return 'OK', 200
+        return 'success' if success else 'failure', 200
+
+    elif action == 'update-quiz':
+        print('Updating quiz')
+        rq = request.get_json()
+        success = db.update_record(rq)
+        print(success)
+        return 'success' if success else 'failure', 200
 
     else:
         print('bad request')

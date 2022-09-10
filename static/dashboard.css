@@ -83,6 +83,28 @@ div#hover-container {
     margin: 1em;
 }
 
+div#updater-container {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    width: 40vw;
+    height: max-content;
+    padding: 10px;
+    background-color: #ece7bd;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+div#updater-container > h2 {
+    margin: auto;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
 .hidden {
     display: none;
     visibility: hidden;
@@ -101,4 +123,43 @@ div#examples > div > div {
     height: 30px;
     border: 1px solid black;
     margin: auto;
+}
+
+div.button {
+    padding: 10px;
+    margin: 10px;
+    border: 2px solid black;
+    width: 100px;
+    background-color: #CCCCCC88;
+    color: #888888;
+    user-select: none;
+    cursor: pointer;
+}
+
+div.button.selected {
+    cursor: unset;
+    color: black;
+    background-color: #CCCCCC;
+}
+
+div.button.selected:hover {
+    filter: unset;
+}
+
+div.button > p {
+    text-align: center;
+}
+
+div.button:hover {
+    filter: brightness(0.8);
+}
+
+#button-correct {
+    background-color: #1b9e77;
+    color: white;
+}
+
+#button-incorrect {
+    background-color: #ff2727;
+    color: white;
 }

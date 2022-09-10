@@ -1,6 +1,118 @@
 const dashboard = document.querySelector('#dashboard');
 const hoverContainer = document.querySelector('#hover-container');
 
+const updaterContainer = document.querySelector('#updater-container');
+const updaterTitle = document.querySelector('#updater-title');
+const buttonCorrect = document.querySelector('#button-correct');
+const buttonIncorrect = document.querySelector('#button-incorrect');
+const buttonName = document.querySelector('#button-name');
+const buttonSound = document.querySelector('#button-sound');
+
+const words = ['cat', 'flip', 'think', 'because'];
+
+let updateDate;
+let updateTarget;
+let updateStudent;
+let updateAssessment = 'name';
+
+setNameTarget = () => {
+    updateAssessment = 'name';
+    buttonSound.classList.remove('selected');
+    buttonName.classList.add('selected');
+}
+
+buttonName.addEventListener('click', setNameTarget);
+buttonSound.addEventListener('click', () => {
+    updateAssessment = 'sound';
+    buttonSound.classList.add('selected');
+    buttonName.classList.remove('selected');
+});
+
+buttonCorrect.addEventListener('click', () => {
+    let update = {
+        'date': updateDate,
+        'student': updateStudent,
+        'target': updateTarget,
+        'assess': updateAssessment,
+        'correct': true
+    }
+
+    sendRequest(update).then(
+        data => {
+            if (data) {
+                let updatedSq = document.querySelector(`#sq-${updateStudent}-${updateTarget}`);
+                switch (updateAssessment) {
+                    case 'name':
+                        updatedSq.classList.remove('missing-name');
+                        updatedSq.classList.remove('missing-read');
+                        break;
+                    case 'sound':
+                        updatedSq.classList.remove('missing-sound');
+                        break;
+                }
+
+                if (updatedSq.classList.length == 1) {
+                    updatedSq.classList.add('all-correct');
+                }
+            }
+        }
+    )
+})
+buttonIncorrect.addEventListener('click', () => {
+    let update = {
+        'date': updateDate,
+        'student': updateStudent,
+        'target': updateTarget,
+        'assess': updateAssessment,
+        'correct': false
+    }
+
+    sendRequest(update).then(
+        data => {
+            if (data) {
+                let isWord = words.includes(updateTarget);
+
+                if (isWord & updateAssessment === 'name') {
+                    updateAssessment = 'read';
+                }
+
+                let updatedSq = document.querySelector(`#sq-${updateStudent}-${updateTarget}`);
+                updatedSq.classList.remove('all-correct');
+                switch (updateAssessment) {
+                    case 'name':
+                        updatedSq.classList.add('missing-name');
+                        break;
+                    case 'read':
+                        updatedSq.classList.add('missing-read');
+                        break;
+                    case 'sound':
+                        updatedSq.classList.add('missing-sound');
+                        break;
+                }
+            }
+        }
+    )
+})
+
+document.querySelector('#button-done').addEventListener('click', () => {
+    updaterContainer.classList.add('hidden');
+})
+
+function sendRequest(body) {
+    return fetch('/api/update-quiz', {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify(body)
+    })
+}
+
 function clearHover() {
     while(hoverContainer.firstChild) {
         hoverContainer.removeChild(hoverContainer.firstChild);
@@ -82,6 +194,7 @@ for (let student of students) {
         newGridSquare.setAttribute('data-student', student);
         newGridSquare.setAttribute('data-date', studentSuccess[student]['date']);
         newGridSquare.setAttribute('data-target', target);
+        newGridSquare.id = `sq-${student}-${target}`;
         if ('name' in result) {
             newGridSquare.setAttribute('data-name', result.name ? 'Correct' : 'Incorrect');
         }
@@ -140,6 +253,16 @@ for (let student of students) {
         newGridSquare.addEventListener('mouseleave', () => {
             clearHover();
             hoverContainer.classList.add('hidden');
+        })
+
+        newGridSquare.addEventListener('click', () => {
+            setNameTarget();
+            updateTarget = newGridSquare.getAttribute('data-target');
+            updateDate = newGridSquare.getAttribute('data-date');
+            updateStudent = newGridSquare.getAttribute('data-student');
+
+            updaterTitle.innerHTML = `Update for ${student}: ${target}`;
+            updaterContainer.classList.remove('hidden');
         })
 
         dashboard.appendChild(newGridSquare);
