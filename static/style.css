@@ -6,6 +6,13 @@ h1 {
     font-family: 'Montserrat', sans-serif;
 }
 
+#student-list-holder {
+    max-height: 80vh;
+    overflow: scroll;
+    scrollbar-width: none;
+    height: max-content;
+}
+
 div.v-flex {
     display: flex;
     flex-direction: column;
@@ -22,7 +29,7 @@ div.h-flex {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
+    align-items: baseline;
     max-width: 1000px;
     height: 100px;
     margin: auto;

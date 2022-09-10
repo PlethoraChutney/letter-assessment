@@ -24,9 +24,6 @@ function clearList() {
 
 function refreshList() {
     clearList();
-    let header = document.createElement('h1');
-    header.innerHTML = 'New quiz for which student?';
-    studentContainer.appendChild(header);
 
     for (let student of studentList) {
         let newLink = document.createElement('a');
