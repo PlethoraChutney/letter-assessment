@@ -108,6 +108,10 @@ class Database(object):
 
         if seating_chart is None:
             seating_chart = {x:'drag-holder' for x in self.students}
+        else:
+            for student in self.students:
+                if student not in seating_chart:
+                    seating_chart[student] = 'drag-holder'
 
         return seating_chart
 
