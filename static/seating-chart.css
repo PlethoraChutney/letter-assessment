@@ -21,7 +21,11 @@ body {
 
 #drag-holder {
     height: max-content;
+    width: max-content;
     margin: 5px;
+    max-height: 600px;
+    overflow-y: scroll;
+    scrollbar-width: none;
 }
 
 #drag-holder > p {
