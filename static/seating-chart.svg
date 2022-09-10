@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <rect x="209.043" y="169.05" width="115.073" height="190.631" style="fill:white;stroke:black;stroke-width:2px;"/>
+    <g transform="matrix(1.9512,0,0,0.627246,-276.089,328.281)">
+        <rect x="209.043" y="169.05" width="115.073" height="190.631" style="fill:rgb(253,255,177);stroke:black;stroke-width:1.38px;"/>
+    </g>
+    <g transform="matrix(1.30565,0,0,1.2648,-227.35,-21.8138)">
+        <path d="M717.707,51.096C689.375,40.628 643.321,57.757 636.725,75.214C630.128,92.672 682.278,98.332 682.046,111.087C681.814,123.843 647.568,134.766 649.612,149.286C651.656,163.807 677.605,199.83 719.173,198.023C760.741,196.217 734.551,162.197 744.769,146.217C754.987,130.237 762.409,86.179 756.685,75.952C751.175,66.107 736.567,58.064 717.707,51.096Z" style="fill:rgb(253,255,177);stroke:black;stroke-width:1.56px;"/>
+    </g>
+    <g transform="matrix(1.9512,0,0,0.627246,170.058,284.904)">
+        <rect x="209.043" y="169.05" width="115.073" height="190.631" style="fill:rgb(255,202,177);stroke:black;stroke-width:1.38px;"/>
+    </g>
+    <g transform="matrix(1.31633,0,0,1.0289,124.829,-43.276)">
+        <rect x="209.043" y="169.05" width="115.073" height="190.631" style="fill:white;stroke:black;stroke-width:1.69px;"/>
+    </g>
+    <g transform="matrix(1.16984,0,0,1.2349,-5.53515,-45.4242)">
+        <path d="M32.633,80.906C30.918,110.773 81.247,113.775 90.716,133.75C100.185,153.724 61.052,158.655 63.748,175.473C66.444,192.29 100.391,192.678 117.563,193.365C134.736,194.053 136.355,149.236 148.44,141.503C160.526,133.77 188.296,91.292 149.251,67.516C110.206,43.741 87.208,67.073 79.039,68.178C71.213,69.237 34.349,51.04 32.633,80.906Z" style="fill:rgb(177,217,255);stroke:black;stroke-width:1.66px;"/>
+    </g>
+    <text x="78.671px" y="212.397px" style="font-family:'Montserrat-Regular', 'Montserrat';font-size:12px;">Blue T<tspan x="115.943px " y="212.397px ">a</tspan>ble</text>
+    <text x="245.063px" y="152.106px" style="font-family:'Montserrat-Regular', 'Montserrat';font-size:12px;">T<tspan x="251.603px " y="152.106px ">a</tspan>ble 1</text>
+    <text x="453.869px" y="114.588px" style="font-family:'Montserrat-Regular', 'Montserrat';font-size:12px;">T<tspan x="460.409px " y="114.588px ">a</tspan>ble 2</text>
+    <text x="653.266px" y="263.237px" style="font-family:'Montserrat-Regular', 'Montserrat';font-size:12px;">Y<tspan x="660.166px " y="263.237px ">e</tspan>llo<tspan x="681.214px " y="263.237px ">w</tspan> T<tspan x="701.446px " y="263.237px ">a</tspan>ble</text>
+    <text x="673.451px" y="369.564px" style="font-family:'Montserrat-Regular', 'Montserrat';font-size:12px;">Shelf</text>
+    <text x="204.738px" y="415.146px" style="font-family:'Montserrat-Regular', 'Montserrat';font-size:12px;">Y<tspan x="211.638px " y="415.146px ">e</tspan>llo<tspan x="232.686px " y="415.146px ">w</tspan> Car<tspan x="266.706px " y="415.146px ">p</tspan>et</text>
+</svg>

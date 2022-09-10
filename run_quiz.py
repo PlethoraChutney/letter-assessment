@@ -103,6 +103,14 @@ class Database(object):
         else:
             return False
 
+    def get_seating_chart(self):
+        seating_chart = self.db.get('seating_chart')
+
+        if seating_chart is None:
+            seating_chart = {x:'drawer' for x in self.students}
+
+        return seating_chart
+
 
 app = Flask(
     __name__,
@@ -182,6 +190,9 @@ def api(action):
         print(success)
         return 'success' if success else 'failure', 200
 
+    elif action == 'student-seats':
+        return db.get_seating_chart(), 200, {'ContentType': 'application/json'}
+
     else:
         print('bad request')
         print(request.get_json())
@@ -190,3 +201,7 @@ def api(action):
 def dashboard():
     success_strings = db.generate_report()
     return render_template('dashboard.html', success_strings = json.dumps(success_strings))
+
+@app.route('/seating-chart', methods = ['GET', 'POST'])
+def seating_chart():
+    return render_template('seating-chart.html', seating_chart = json.dumps(db.get_seating_chart()))

@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+body {
+    font-family: Montserrat, sans-serif;
+}
+
+.h-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#drag-holder {
+    height: max-content;
+    margin: 5px;
+}
+
+.student-name {
+    border: 1px solid black;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+#seating-chart {
+    width: 80vw;
+    height: 80vh;
+    margin: auto;
+}
