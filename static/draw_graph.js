@@ -21,6 +21,63 @@ setNameTarget = () => {
     buttonName.classList.add('selected');
 }
 
+function studentStats(event) {
+    studentName = event.target.getAttribute('data-student');
+    const results = studentSuccess[studentName]['results'];
+    const canv = new OffscreenCanvas(475, 280);
+    let numbers = 0;
+    let lower = 0;
+    let upper = 0;
+    let sounds = 0;
+
+    for (number of [...Array(20).keys()]) {
+        if (results[number]['name']) {
+            numbers += 1;
+        }
+    }
+
+    for (letter of 'abcdefghijklmnopqrstuvwxyz'.split('')) {
+        if (results[letter]['name']) {
+            lower += 1;
+        }
+
+        if (results[letter]['sound']) {
+            sounds += 1;
+        }
+
+        if (results[letter.toUpperCase()]['name']) {
+            upper += 1;
+        }
+    }
+
+    numbers = Math.round(numbers / 20 * 100);
+    lower = Math.round(lower / 26 * 100);
+    sounds = Math.round(sounds / 26 * 100);
+    upper = Math.round(upper / 26 * 100);
+
+    let canv2d = canv.getContext('2d');
+    canv2d.imageSmoothingEnabled = false;
+    canv2d.clearRect(0, 0, canv.width, canv.height);
+    canv2d.fillStyle = 'white';
+    canv2d.fillRect(0,0,canv.width, canv.height);
+
+    canv2d.fillStyle = 'black';
+    canv2d.font = '36pt Montserrat';
+    canv2d.fillText(`Report for ${studentName}:`, 10, 50);
+
+    canv2d.font = '20pt Montserrat';
+    canv2d.fillText(`${numbers}% of number identification`, 55, 100);
+    canv2d.fillText(`${lower}% of lowercase names`, 55, 150);
+    canv2d.fillText(`${upper}% of uppercase names`, 55, 200);
+    canv2d.fillText(`${sounds}% of letter sounds`, 55, 250);
+
+    canv.convertToBlob().then(blob => {
+        window.open(URL.createObjectURL(blob), target = '_blank');
+    });
+
+    navigator.clipboard.writeText(`Report for ${studentName}:\n\t${numbers}% of number identification\n\t${lower}% of lowercase names\n\t${upper}% of uppercase names\n\t${sounds}% of letter sounds\n`);
+};
+
 buttonName.addEventListener('click', setNameTarget);
 buttonSound.addEventListener('click', () => {
     updateAssessment = 'sound';
@@ -179,6 +236,8 @@ for (let student of students) {
         }
     })
 
+    studentNameP.addEventListener('click', studentStats);
+
     studentNameP.addEventListener('mouseleave', () => {
         for (let square of document.querySelectorAll('div.grid-square')) {
             square.classList.remove('lowlight');
@@ -285,7 +344,9 @@ for (let student of students) {
         for (let square of document.querySelectorAll('div.grid-square')) {
             square.classList.remove('lowlight');
         }
-    }) 
+    })
+
+    rightStudent.addEventListener('click', studentStats);
 
     dashboard.appendChild(rightStudent);
 
