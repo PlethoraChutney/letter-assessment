@@ -48,7 +48,11 @@ class Database(object):
     def new_quiz(self, student):
         if student not in self.students:
             return False
-        
+        return True
+
+    def complete_quiz(self, results):
+        student = results['student']
+
         today = str(date.today())
         if today not in self.dates:
             self.db['quizzes'][today] = {
@@ -56,6 +60,19 @@ class Database(object):
             }
         else:
             self.db['quizzes'][today][student] = {x:False for x in targets}
+
+        for section in [results['upper'], results['lower']]:
+            for letter, correct in section.items():
+                self.db['quizzes'][today][student][letter] = correct
+            
+            for num, correct in results['numbers'].items():
+                num = int(num[1:])
+                self.db['quizzes'][today][student][num] = correct
+
+            for word, correct in results['words'].items():
+                self.db['quizzes'][today][student][word] = correct
+
+            self.save_db()
 
         return True
 
@@ -141,18 +158,7 @@ def quiz(student):
         today = str(date.today())
         rq = request.get_json()
         if rq['action'] == 'quiz_complete':
-            for section in [rq['upper'], rq['lower']]:
-                for letter, correct in section.items():
-                    db.db['quizzes'][today][rq['student']][letter] = correct
-            
-            for num, correct in rq['numbers'].items():
-                num = int(num[1:])
-                db.db['quizzes'][today][rq['student']][num] = correct
-
-            for word, correct in rq['words'].items():
-                db.db['quizzes'][today][rq['student']][word] = correct
-
-            db.save_db()
+            db.complete_quiz(rq)
             return 'OK', 200
 
 @app.route('/api/<action>', methods = ['GET', 'POST'])
@@ -196,7 +202,6 @@ def api(action):
         print('Updating quiz')
         rq = request.get_json()
         success = db.update_record(rq)
-        print(success)
         return 'success' if success else 'failure', 200
 
     elif action == 'student-seats':
