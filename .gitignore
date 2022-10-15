@@ -1,3 +1,4 @@
 __pycache__/
 setup-env.sh
 students.json
+.DS_Store

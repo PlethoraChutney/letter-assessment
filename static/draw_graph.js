@@ -75,8 +75,8 @@ function studentStats(event) {
         window.open(URL.createObjectURL(blob), target = '_blank');
     });
 
-    navigator.clipboard.writeText(`Report for ${studentName}:\n\t${numbers}% of number identification\n\t${lower}% of lowercase names\n\t${upper}% of uppercase names\n\t${sounds}% of letter sounds\n`);
-};
+    navigator.clipboard.writeText(`In early September, ${studentName} successfully identified ${lower}% of lowercase letter names, ${upper}% of uppercase letter names, and ${sounds}% of letter sounds.`);
+}
 
 buttonName.addEventListener('click', setNameTarget);
 buttonSound.addEventListener('click', () => {
