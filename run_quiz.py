@@ -5,6 +5,7 @@ from datetime import date
 from flask import Flask, render_template, request, make_response
 from string import ascii_letters
 import pandas as pd
+import subprocess
 
 targets = list(ascii_letters)
 targets.extend(range(21))
@@ -102,6 +103,26 @@ class Database(object):
 
         return(success_dicts)
 
+    def make_df(self):
+        csv_dicts = []
+        for date, quizzes in self.db['quizzes'].items():
+            for student, quiz in quizzes.items():
+                for target, results in quiz.items():
+                    try:
+                        for category, success in results.items():
+                            csv_dicts.append({
+                                'date': date,
+                                'student': student,
+                                'target': target,
+                                'category': category,
+                                'success': success
+                            })
+                    except AttributeError:
+                        print('Attribute error when generating csv')
+                        continue
+
+        return pd.DataFrame(csv_dicts)
+
     def update_record(self, rec):
         target = rec['target']
         assessment = rec['assess']
@@ -164,24 +185,7 @@ def quiz(student):
 @app.route('/api/<action>', methods = ['GET', 'POST'])
 def api(action):
     if action == 'make-csv':
-        csv_dicts = []
-        for date, quizzes in db.db['quizzes'].items():
-            for student, quiz in quizzes.items():
-                for target, results in quiz.items():
-                    try:
-                        for category, success in results.items():
-                            csv_dicts.append({
-                                'date': date,
-                                'student': student,
-                                'target': target,
-                                'category': category,
-                                'success': success
-                            })
-                    except AttributeError:
-                        print('Attribute error when generating csv')
-                        continue
-
-        response = make_response(pd.DataFrame(csv_dicts).to_csv(index = False))
+        response = make_response(db.make_df().to_csv(index = False))
         response.headers['Content-Disposition'] = 'attachment; filename=quiz-results.csv'
         response.headers['Content-Type'] = 'text/csv'
         return response
@@ -211,6 +215,15 @@ def api(action):
         new_chart = request.get_json()
         db.update_seating_chart(new_chart)
         return 'OK', 200
+
+    elif action == 'make-graphs':
+        db.make_df().to_csv('student-results.csv', index = False)
+        subprocess.run([
+            'Rscript',
+            'make-graphs.R'
+        ])
+        
+        return render_template('student-plot.html')
 
     else:
         print('bad request')
