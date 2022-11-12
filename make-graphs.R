@@ -7,7 +7,7 @@ processed_data <- student_data |>
   filter(type != 'read', student != 'Test') |> 
   mutate(category = case_when(
     str_detect('ABCDEFGHIJKLMNOPQRSTUVWXYZ', target) ~ 'Uppercase',
-    target %in% 1:20 ~ 'Number',
+    target %in% 0:20 ~ 'Number',
     type == 'name' ~ 'Lowercase',
     type == 'sound' ~ 'Sound'
   )) |>
@@ -50,3 +50,92 @@ processed_data |>
   ) +
   expand_limits(y = 1)
 ggsave('static/student_plot.svg', width = 10, height = 30)
+
+
+# Table -------------------------------------------------------------------
+
+library(gt)
+library(gtExtras)
+
+table_data <- student_data |> 
+  mutate(type = category) |> 
+  filter(student != 'Test') |> 
+  mutate(category = case_when(
+    str_detect('ABCDEFGHIJKLMNOPQRSTUVWXYZ', target) ~ 'Uppercase',
+    target %in% 0:20 ~ 'Number',
+    type == 'name' ~ 'Lowercase',
+    type == 'sound' ~ 'Sound',
+    type == 'read' ~ 'Word'
+  ))
+
+table_data |> 
+  group_by(date, student, category) |> 
+  rename('Date' = date) |> 
+  summarize(
+    Percent = round(sum(success) / n(), digits = 2),
+    Success = sum(success)
+  ) |>
+  pivot_wider(
+    names_from = category,
+    values_from = c(Success, Percent),
+    names_glue = "{category}.{.value}"
+  ) |>
+  select(
+    starts_with('Number'),
+    starts_with('Lowercase'),
+    starts_with('Sound'),
+    starts_with('Uppercase'),
+    starts_with('Word')
+  ) |> 
+  arrange(student) |> 
+  group_by(student) |> 
+  gt(
+    rowname_col = 'Date'
+  ) |> 
+  tab_spanner_delim(delim = '.') |> 
+  fmt_percent(
+    columns = contains('Percent'),
+    decimals = 0
+  ) |> 
+  gt_color_rows(
+    contains('Percent'),
+    palette = 'Blues',
+    domain = c(0, 1)
+  ) |> 
+  gt_color_rows(
+    c('Number.Success'),
+    palette = 'Blues',
+    domain = 0:21
+  ) |> 
+  gt_color_rows(
+    c('Lowercase.Success', 'Sound.Success', 'Uppercase.Success'),
+    palette = 'Blues',
+    domain = 0:26
+  ) |> 
+  gt_color_rows(
+    'Word.Success',
+    palette = 'Blues',
+    domain = 0:4
+  ) |> 
+  fmt_number(
+    'Number.Success',
+    decimals = 0,
+    pattern = '{x}/21'
+  ) |> 
+  fmt_number(
+    c('Lowercase.Success', 'Sound.Success', 'Uppercase.Success'),
+    decimals = 0,
+    pattern = '{x}/26'
+  ) |> 
+  fmt_number(
+    'Word.Success',
+    decimals = 0,
+    pattern = '{x}/4'
+  ) |> 
+  tab_options(
+    row_group.border.top.width = 2,
+    row_group.border.bottom.width = 0,
+    table_body.hlines.color = 'white',
+    table_body.vlines.color = 'white',
+    stub.border.width = 0
+  )

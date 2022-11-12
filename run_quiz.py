@@ -2,7 +2,7 @@
 
 import json
 from datetime import date
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, redirect
 from string import ascii_letters
 import pandas as pd
 import subprocess
@@ -224,6 +224,15 @@ def api(action):
         ])
         
         return render_template('student-plot.html')
+
+    elif action == 'make-table':
+        db.make_df().to_csv('student-results.csv', index = False)
+        subprocess.run([
+            'Rscript',
+            'make-graphs.R'
+        ])
+
+        return redirect('/static/student_table.html', code = 302)
 
     else:
         print('bad request')
