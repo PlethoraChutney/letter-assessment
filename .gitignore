@@ -2,3 +2,7 @@ __pycache__/
 setup-env.sh
 students.json
 .DS_Store
+.Rhistory
+
+static/student_plot.svg
+student-results.csv
