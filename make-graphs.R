@@ -4,13 +4,13 @@ student_data <- read_csv('student-results.csv')
 
 processed_data <- student_data |> 
   mutate(type = category) |> 
-  filter(type != 'read') |> 
+  filter(type != 'read', student != 'Test') |> 
   mutate(category = case_when(
     str_detect('ABCDEFGHIJKLMNOPQRSTUVWXYZ', target) ~ 'Uppercase',
     target %in% 1:20 ~ 'Number',
     type == 'name' ~ 'Lowercase',
     type == 'sound' ~ 'Sound'
-  )) |> 
+  )) |>
   mutate(date = as.character(date)) |> 
   separate(date, into = c('year', 'month', 'day'), sep = '-') |> 
   mutate(day = as.numeric(day)) |> 
@@ -21,7 +21,8 @@ processed_data <- student_data |>
   group_by(year, month, student, category, success) |> 
   count() |> 
   pivot_wider(names_from = success, values_from = n) |> 
-  mutate(prop = `TRUE` / (`FALSE` + `TRUE`)) |> 
+  replace_na(list('TRUE' = 0, 'FALSE' = 0)) |>
+  mutate(prop = `TRUE` / (`FALSE` + `TRUE`)) |>
   ungroup() |> 
   select(year, month, student, category, prop)
 
@@ -34,10 +35,11 @@ processed_data |>
   theme(
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank(),
-    legend.position = 'none'
+    legend.position = 'none',
+    panel.spacing = unit(2, 'lines')
   ) +
   scale_y_continuous(
-    sec.axis = sec_axis(~.),
+    sec.axis = sec_axis(~., breaks = c(0,0.5,1)),
     breaks = c(0, 0.5, 1.0)
   ) +
   geom_col(aes(fill = category), color = 'black') +
@@ -47,4 +49,4 @@ processed_data |>
     y = 'Proportion Correct'
   ) +
   expand_limits(y = 1)
-ggsave('static/student_plot.svg', width = 10, height = 20)
+ggsave('static/student_plot.svg', width = 10, height = 30)
