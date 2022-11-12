@@ -138,4 +138,7 @@ table_data |>
     table_body.hlines.color = 'white',
     table_body.vlines.color = 'white',
     stub.border.width = 0
+  ) |> 
+  gtsave(
+    'static/student_table.html'
   )
