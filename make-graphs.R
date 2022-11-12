@@ -6,10 +6,10 @@ processed_data <- student_data |>
   mutate(type = category) |> 
   filter(type != 'read', student != 'Test') |> 
   mutate(category = case_when(
+    type == 'sound' ~ 'Sound',
     str_detect('ABCDEFGHIJKLMNOPQRSTUVWXYZ', target) ~ 'Uppercase',
     target %in% 0:20 ~ 'Number',
-    type == 'name' ~ 'Lowercase',
-    type == 'sound' ~ 'Sound'
+    type == 'name' ~ 'Lowercase'
   )) |>
   mutate(date = as.character(date)) |> 
   separate(date, into = c('year', 'month', 'day'), sep = '-') |> 
@@ -61,10 +61,10 @@ table_data <- student_data |>
   mutate(type = category) |> 
   filter(student != 'Test') |> 
   mutate(category = case_when(
+    type == 'sound' ~ 'Sound',
     str_detect('ABCDEFGHIJKLMNOPQRSTUVWXYZ', target) ~ 'Uppercase',
     target %in% 0:20 ~ 'Number',
     type == 'name' ~ 'Lowercase',
-    type == 'sound' ~ 'Sound',
     type == 'read' ~ 'Word'
   ))
 

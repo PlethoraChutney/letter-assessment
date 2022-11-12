@@ -81,6 +81,7 @@ class Database(object):
         success_dicts = {}
         student_dates = {}
 
+        # get all quiz dates
         for date, quizzes in self.db['quizzes'].items():
             for student in quizzes.keys():
                 if student not in self.students:
@@ -91,6 +92,7 @@ class Database(object):
                 else:
                     student_dates[student].append(date)
 
+        # select most recent quiz
         for student in student_dates:
             student_dates[student].sort()
             student_dates[student] = student_dates[student][-1]

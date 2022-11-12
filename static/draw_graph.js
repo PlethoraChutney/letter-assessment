@@ -41,7 +41,7 @@ function studentStats(event) {
             lower += 1;
         }
 
-        if (results[letter]['sound']) {
+        if (results[letter.toUpperCase()]['sound'] | results[letter]['sound']) {
             sounds += 1;
         }
 
@@ -258,7 +258,7 @@ for (let student of students) {
             newGridSquare.setAttribute('data-name', result.name ? 'Correct' : 'Incorrect');
         }
 
-        if (target == 20 | target === 'z') {
+        if (target == 20 | target === 'z' | target === 'Z') {
             newGridSquare.classList.add('right-border');
         }
 

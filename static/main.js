@@ -35,11 +35,11 @@ function shuffle(a) {
 }
 
 for (let letter of shuffle(letters)) {
-    lowerCase[letter] = {'name': false, 'sound': false};
+    lowerCase[letter] = {'name': false};
 }
 
 for (let letter of shuffle(letters)) {
-    upperCase[letter.toUpperCase()] = {'name': false};
+    upperCase[letter.toUpperCase()] = {'name': false, 'sound': false};
 }
 
 let integers = shuffle([...Array(21).keys()])
@@ -87,8 +87,8 @@ function markName(isCorrect) {
 }
 
 function markSound(isCorrect) {
-    if (currSet === 'lower') {
-        lowerCase[currValue]['sound'] = isCorrect;
+    if (currSet === 'upper') {
+        upperCase[currValue]['sound'] = isCorrect;
     }
 }
 
@@ -167,7 +167,7 @@ function advanceText() {
 function markAndAdvance(isCorrect) {
     if (currTarget === 'name') {
         markName(isCorrect);
-        if (currSet === 'lower') {
+        if (currSet === 'upper') {
             currTarget = 'sound';
             targetType.innerHTML = 'Letter Sound';
         } else {
