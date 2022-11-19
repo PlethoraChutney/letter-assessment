@@ -6,9 +6,25 @@ div#word-report {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    width: max-content;
+    width: 800px;
     gap: 10px;
     padding-top: 20px;
+}
+
+div#word-report > div {
+    width: 600px;
+    text-align: center;
+    color: #00000088;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5em;
+}
+
+div#word-report > p {
+    border-top: 1px solid grey;
+    width: 100%;
+    text-align: center;
+    padding-top: 10px;
 }
 
 p {

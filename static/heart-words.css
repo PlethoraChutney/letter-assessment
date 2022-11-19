@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Edu+QLD+Beginner&family=Montserrat&family=Comic+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 h1 {
-    font-family: 'Edu QLD Beginner', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 256pt;
     width: max-content;
     height: max-content;
