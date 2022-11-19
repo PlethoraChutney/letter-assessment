@@ -11,6 +11,11 @@ h1 {
     overflow: scroll;
     scrollbar-width: none;
     height: max-content;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    width: max-content;
+    padding-top: 10px;
 }
 
 div.v-flex {

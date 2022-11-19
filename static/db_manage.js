@@ -27,9 +27,13 @@ function refreshList() {
 
     for (let student of studentList) {
         let newLink = document.createElement('a');
-        newLink.href = `/quiz/${student}`
+        newLink.href = `/quiz/${student}`;
         newLink.innerHTML = student;
         studentContainer.appendChild(newLink);
+        let wordLink = document.createElement('a');
+        wordLink.href = `/heart-words/${student}`;
+        wordLink.innerHTML = '(or, word quiz?)';
+        studentContainer.appendChild(wordLink);
     }
 }
 

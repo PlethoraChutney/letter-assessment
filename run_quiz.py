@@ -18,7 +18,10 @@ class Database(object):
             with open(db_path, 'r') as f:
                 self.db = json.load(f)
         except FileNotFoundError:
-            self.db = {'students': [], 'quizzes': {}}
+            self.db = {'students': [], 'quizzes': {}, 'words': {}}
+
+        if 'words' not in self.db:
+            self.db['words'] = {}
 
     @property
     def students(self):
@@ -76,6 +79,33 @@ class Database(object):
             self.save_db()
 
         return True
+
+    def complete_heart_quiz(self, results):
+        student = results['student']
+
+        today = str(date.today())
+        if student not in self.db['words']:
+            self.db['words'][student] = {}
+
+        self.db['words'][student][today] = results['correct_words']
+
+        self.save_db()
+
+        return True
+
+    @property
+    def heart_words_report(self):
+        heart_words = {}
+        for student in self.db['words'].keys():
+            try:
+                latest_quiz = max(self.db['words'][student].keys())
+            except ValueError:
+                continue
+            except KeyError:
+                print(student)
+            heart_words[student] = self.db['words'][student][latest_quiz]
+
+        return json.dumps(heart_words)
 
     def generate_report(self):
         success_dicts = {}
@@ -178,11 +208,24 @@ def quiz(student):
         db.new_quiz(student)
         return render_template('quiz.html', student = student)
     elif request.method == 'POST':
-        today = str(date.today())
         rq = request.get_json()
         if rq['action'] == 'quiz_complete':
             db.complete_quiz(rq)
             return 'OK', 200
+
+@app.route('/heart-words/<student>', methods = ['GET', 'POST'])
+def heart_words(student):
+    if request.method == 'GET':
+        return render_template('heart-words.html', student = student)
+    elif request.method == 'POST':
+        rq = request.get_json()
+        if rq['action'] == 'quiz_complete':
+            db.complete_heart_quiz(rq)
+            return 'OK', 200
+
+@app.route('/heart-words-report/', methods = ['GET'])
+def heart_words_report():
+    return render_template('heart-words-report.html', reportInfo = db.heart_words_report)
 
 @app.route('/api/<action>', methods = ['GET', 'POST'])
 def api(action):

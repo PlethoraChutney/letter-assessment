@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+div#word-report {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: max-content;
+    gap: 10px;
+    padding-top: 20px;
+}
+
+p {
+    font-family: Monteserrat, sans-serif;
+    font-size: 16pt;
+    margin: 0;
+    padding: 0;
+}
