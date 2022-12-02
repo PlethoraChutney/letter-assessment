@@ -1,9 +1,9 @@
 const wordsList = [
-    'the', 'I', 'to', 'a', 'is', 'my',
-    'go', 'me', 'like', 'on', 'in',
-    'so', 'we', 'it', 'and', 'up', 'at',
+    'the', 'is', 'am', 'like', 'I', 'and', 'a', 'my',
+    'go', 'me', 'on', 'in',
+    'so', 'we', 'it', 'to', 'up', 'at',
     'see', 'he', 'do', 'you', 'an', 'can',
-    'no', 'am', 'went', 'are', 'this', 'look',
+    'no', 'went', 'are', 'this', 'look',
     'for', 'get', 'come', 'got', 'play', 'was',
     'had', 'they', 'will', 'too', 'all', 'be',
     'as', 'ball', 'by', 'day', 'did', 'has',
@@ -54,6 +54,11 @@ function markAndAdvance(correct) {
         bigWord.innerHTML = 'Done!';
     } else {
         bigWord.innerHTML = wordsList[currWordInd];
+        if (wordsList[currWordInd] === 'I') {
+            bigWord.classList.add('serif-font');
+        } else {
+            bigWord.classList.remove('serif-font');
+        }
     }
 }
 

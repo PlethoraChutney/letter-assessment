@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather&family=Montserrat&display=swap');
 
 h1 {
     font-family: 'Montserrat', sans-serif;
@@ -6,4 +6,8 @@ h1 {
     width: max-content;
     height: max-content;
     margin: auto;
+}
+
+.serif-font {
+    font-family: Merriweather, serif;
 }
