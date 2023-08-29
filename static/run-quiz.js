@@ -113,7 +113,6 @@ function markAndAdvance(success) {
     currIndex++;
 
     const newTarget = targetArray[currIndex];
-    console.log(newTarget);
 
     bigText.innerHTML = newTarget.targetChar;
     targetType.innerHTML = newTarget.targetType;
@@ -122,7 +121,6 @@ function markAndAdvance(success) {
     bigText.classList.remove('other-handwritten');
     bigText.classList.remove('arial');
     if (newTarget.handwritten) {
-        console.log(newTarget.targetChar);
         switch (newTarget.targetChar) {
             case 'e':
                 bigText.classList.add('arial');

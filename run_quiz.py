@@ -19,19 +19,16 @@ class Database(object):
             with open(db_path, "r") as f:
                 self.db = json.load(f)
         except FileNotFoundError:
-            self.db = {"students": [], "quizzes": {}, "words": {}}
-
-        if "words" not in self.db:
-            self.db["words"] = {}
+            self.db = {}
 
     @property
     def students(self):
-        return self.db["students"]
+        return list(self.db.keys())
 
     def new_student(self, student):
-        if student in self.db["students"]:
+        if student in self.db:
             return "Student in list"
-        self.db["students"].append(student)
+        self.db[student] = {"latest_results": {}, "results": {"letter_quizzes": {}}}
         self.save_db()
         return "Success"
 
@@ -55,28 +52,13 @@ class Database(object):
             return False
         return True
 
-    def complete_quiz(self, results):
-        student = results["student"]
-
+    def complete_quiz(self, student, results):
         today = str(date.today())
-        if today not in self.dates:
-            self.db["quizzes"][today] = {student: {x: False for x in targets}}
-        else:
-            self.db["quizzes"][today][student] = {x: False for x in targets}
 
-        for section in [results["upper"], results["lower"]]:
-            for letter, correct in section.items():
-                self.db["quizzes"][today][student][letter] = correct
+        self.db[student]["latest_results"]["letter_quiz"] = today
+        self.db[student]["results"]["letter_quizzes"][today] = results
 
-            for num, correct in results["numbers"].items():
-                num = int(num[1:])
-                self.db["quizzes"][today][student][num] = correct
-
-            for word, correct in results["words"].items():
-                self.db["quizzes"][today][student][word] = correct
-
-            self.save_db()
-
+        self.save_db()
         return True
 
     def complete_heart_quiz(self, results):
@@ -213,7 +195,7 @@ def quiz(student):
         rq = request.get_json()
         if rq["action"] == "quiz_complete":
             print(rq)
-            # db.complete_quiz(rq)
+            db.complete_quiz(student, rq)
             return "OK", 200
 
 
