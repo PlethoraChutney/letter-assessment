@@ -59,7 +59,7 @@ function studentStats(event) {
     canv2d.imageSmoothingEnabled = false;
     canv2d.clearRect(0, 0, canv.width, canv.height);
     canv2d.fillStyle = 'white';
-    canv2d.fillRect(0,0,canv.width, canv.height);
+    canv2d.fillRect(0, 0, canv.width, canv.height);
 
     canv2d.fillStyle = 'black';
     canv2d.font = '36pt Montserrat';
@@ -171,7 +171,7 @@ function sendRequest(body) {
 }
 
 function clearHover() {
-    while(hoverContainer.firstChild) {
+    while (hoverContainer.firstChild) {
         hoverContainer.removeChild(hoverContainer.firstChild);
     }
 }
@@ -180,7 +180,14 @@ function clearHover() {
 const students = Object.keys(studentSuccess);
 students.sort();
 
-const headers = ['Student', ...Object.keys(studentSuccess[students[0]]['results']), 'Student'];
+const headers = [
+    'Student',
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    ...Array.from('ABCDEFGHIJLKMNOPQRSTUVWXYZ'),
+    ...Array.from('abcdefghijklmnopqrstuvwxyz'),
+    'cat', 'flip', 'think', 'because',
+    'Student'
+];
 const wordConversion = {
     'cat': '😸',
     'flip': '🔄',
@@ -215,12 +222,13 @@ for (let header of headers) {
             square.classList.remove('wider');
         }
     })
-    
+
 
     dashboard.appendChild(newHeader);
 }
 
 for (let student of students) {
+    // create student names
     let studentNameP = document.createElement('p');
     studentNameP.innerHTML = student;
     studentNameP.id = `student-name-${student}`
@@ -242,23 +250,32 @@ for (let student of students) {
         for (let square of document.querySelectorAll('div.grid-square')) {
             square.classList.remove('lowlight');
         }
-    }) 
+    })
 
     dashboard.appendChild(studentNameP);
 
-    for (let [target, result] of Object.entries(studentSuccess[student]['results'])) {
+    // add data divs
+
+    for (let header of headers) {
+        if (header === 'Student') {
+            continue;
+        }
+
         let newGridSquare = document.createElement('div');
         newGridSquare.classList.add('grid-square');
 
         newGridSquare.setAttribute('data-student', student);
         newGridSquare.setAttribute('data-date', studentSuccess[student]['date']);
-        newGridSquare.setAttribute('data-target', target);
-        newGridSquare.id = `sq-${student}-${target}`;
+        newGridSquare.setAttribute('data-target', header);
+        newGridSquare.id = `sq-${student}-${header}`;
+
+        let result = studentSuccess[student]['results'][header];
+        console.log(result)
         if ('name' in result) {
             newGridSquare.setAttribute('data-name', result.name ? 'Correct' : 'Incorrect');
         }
 
-        if (target == 20 | target === 'z' | target === 'Z') {
+        if (header == 20 | header === 'z' | header === 'Z') {
             newGridSquare.classList.add('right-border');
         }
 
@@ -320,13 +337,14 @@ for (let student of students) {
             updateDate = newGridSquare.getAttribute('data-date');
             updateStudent = newGridSquare.getAttribute('data-student');
 
-            updaterTitle.innerHTML = `Update for ${student}: ${target}`;
+            updaterTitle.innerHTML = `Update for ${student}: ${header}`;
             updaterContainer.classList.remove('hidden');
         })
 
         dashboard.appendChild(newGridSquare);
     }
 
+    // create final student ps
     let rightStudent = document.querySelector(`#student-name-${student}`).cloneNode(deep = true);
     rightStudent.id = `student-name${student}-right`;
 

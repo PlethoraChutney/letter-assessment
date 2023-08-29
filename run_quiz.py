@@ -89,32 +89,32 @@ class Database(object):
         return json.dumps(heart_words)
 
     def generate_report(self):
-        success_dicts = {}
-        student_dates = {}
+        report = {}
+        for student in self.students:
+            latest_date = self.db[student]["latest_results"]["letter_quiz"]
+            results = self.db[student]["results"]["letter_quizzes"][latest_date][
+                "results"
+            ]
 
-        # get all quiz dates
-        for date, quizzes in self.db["quizzes"].items():
-            for student in quizzes.keys():
-                if student not in self.students:
-                    continue
+            report[student] = {"date": latest_date}
+            stu_results = {letter["targetChar"]: {} for letter in results}
 
-                if student not in student_dates:
-                    student_dates[student] = [date]
-                else:
-                    student_dates[student].append(date)
+            for letter in results:
+                # convert for how the dashboard wants data
+                if letter["targetType"] == "number":
+                    letter["targetType"] = "name"
+                elif letter["targetType"] == "word":
+                    letter["targetType"] = "read"
 
-        # select most recent quiz
-        for student in student_dates:
-            student_dates[student].sort()
-            student_dates[student] = student_dates[student][-1]
+                stu_results[letter["targetChar"]][letter["targetType"]] = letter[
+                    "success"
+                ]
 
-        for student, date in student_dates.items():
-            quiz = self.db["quizzes"][date][student]
-            success_dicts[student] = {}
-            success_dicts[student]["date"] = date
-            success_dicts[student]["results"] = quiz
+            report[student]["results"] = stu_results
 
-        return success_dicts
+        with open("current-dashboard.json", "w") as f:
+            json.dump(report, f)
+        return report
 
     def make_df(self):
         csv_dicts = []
@@ -194,7 +194,7 @@ def quiz(student):
     elif request.method == "POST":
         rq = request.get_json()
         if rq["action"] == "quiz_complete":
-            print(rq)
+            del rq["action"]
             db.complete_quiz(student, rq)
             return "OK", 200
 
