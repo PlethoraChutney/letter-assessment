@@ -8,13 +8,12 @@ h1 {
 
 #dashboard {
     display: grid;
-    grid-template-columns: 75px repeat(77, 15px) 75px;
     width: max-content;
     margin: auto;
     font-family: 'Montserrat', sans-serif;
 }
 
-#dashboard > p {
+#dashboard>p {
     width: 100%;
     text-align: center;
     margin: 0;
@@ -34,43 +33,43 @@ p.header {
     opacity: 0.1;
 }
 
-#dashboard > div {
+#dashboard>div {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
 }
 
-#dashboard > div.wider {
-    width: 45px;
+#dashboard>div.wider {
+    width: 60px;
     margin-left: -15px;
     z-index: 100;
 }
 
-#dashboard > div.right-border {
+#dashboard>div.right-border {
     border-right: 1px solid black;
 }
 
-#dashboard > div:hover {
+#dashboard>div:hover {
     border: 1px solid black;
 }
 
-#dashboard > div.all-correct {
+#dashboard>div.all-correct {
     background-color: #1b9e77;
 }
 
-#dashboard > div.missing-name {
+#dashboard>div.missing-name {
     background-color: #d95f02;
 }
 
-#dashboard > div.missing-sound {
+#dashboard>div.missing-sound {
     background-color: #7570b3;
 }
 
-#dashboard > div.missing-read {
+#dashboard>div.missing-read {
     background-color: #fb9a99;
 }
 
-#dashboard > div.missing-sound.missing-name {
+#dashboard>div.missing-sound.missing-name {
     background-color: #e7298a;
 }
 
@@ -99,7 +98,7 @@ div#updater-container {
     border-radius: 10px;
 }
 
-div#updater-container > h2 {
+div#updater-container>h2 {
     margin: auto;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
@@ -118,7 +117,7 @@ div.h-flex {
     gap: 20px;
 }
 
-div#examples > div > div {
+div#examples>div>div {
     width: 30px;
     height: 30px;
     border: 1px solid black;
@@ -146,7 +145,7 @@ div.button.selected:hover {
     filter: unset;
 }
 
-div.button > p {
+div.button>p {
     text-align: center;
 }
 

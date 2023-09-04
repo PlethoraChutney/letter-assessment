@@ -13,11 +13,11 @@ function sendRequest(dest, body) {
     })
 };
 
-console.log(studentList);
 const studentContainer = document.querySelector('#student-list-holder');
+const quizTypeDropdown = document.querySelector('#quiz-type-selector');
 
 function clearList() {
-    while(studentContainer.firstChild) {
+    while (studentContainer.firstChild) {
         studentContainer.removeChild(studentContainer.firstChild);
     }
 };
@@ -27,50 +27,46 @@ function refreshList() {
 
     for (let student of studentList) {
         let newLink = document.createElement('a');
-        newLink.href = `/quiz/${student}`;
+        newLink.href = 'javascript:;';
         newLink.innerHTML = student;
+        newLink.addEventListener('click', () => {
+            window.location.href = `/quiz/${quizTypeDropdown.value}/${student}`;
+        })
         studentContainer.appendChild(newLink);
-        let wordLink = document.createElement('a');
-        wordLink.href = `/heart-words/${student}`;
-        wordLink.innerHTML = '(or, word quiz?)';
-        studentContainer.appendChild(wordLink);
     }
 }
 
 // inital page setup
 refreshList();
 
-function newStudent() {
-    let studentName = prompt("New student's name:");
+function newKid() {
+    let kidName = prompt("New student's name:");
 
-    if (studentName.length > 0) {
-        sendRequest('/api/add-student', {
-            'student': studentName
+    if (kidName.length > 0) {
+        sendRequest('/api/add-kid', {
+            'kid_name': kidName
         }).then(() => {
-            studentList.push(studentName);
+            studentList.push(kidName);
             refreshList();
         });
     }
 }
 
-function deleteStudent() {
-    let studentName = prompt('Student to delete (case sensitive):');
+function deleteKid() {
+    let kidName = prompt('Student to delete (case sensitive):');
 
-    while (studentName.length > 0 & studentList.indexOf(studentName) == -1) {
-        console.log(studentList);
-        console.log(studentName);
-        console.log(studentName in studentList);
-        studentName = prompt(`${studentName} not found. Try again:`);
+    while (kidName.length > 0 & studentList.indexOf(kidName) == -1) {
+        kidName = prompt(`${kidName} not found. Try again:`);
     }
 
-    if (studentName.length == 0) {
+    if (kidName.length == 0) {
         return
     }
 
-    sendRequest('/api/delete-student', {
-        'student': studentName
+    sendRequest('/api/delete-kid', {
+        'kid_name': kidName
     }).then(() => {
-        studentList.splice(studentList.indexOf(studentName), 1);
+        studentList.splice(studentList.indexOf(kidName), 1);
         refreshList();
     });
 

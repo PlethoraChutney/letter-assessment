@@ -1,0 +1,205 @@
+// studentSuccess is defined in the template dashboard.html
+// dashboardType is defined in the template dashboard.html
+console.log(studentSuccess);
+const students = Object.keys(studentSuccess.students);
+const dashboard = document.querySelector('#dashboard');
+const hoverContainer = document.querySelector('#hover-container');
+
+dashboard.style.gridTemplateColumns = `75px repeat(${studentSuccess.unique_vals.length}, 30px) 75px`;
+
+headers = studentSuccess.unique_vals;
+if (dashboardType === 'numbers') {
+    headers = [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+        10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+    ]
+}
+headers.unshift('Student');
+headers.push('Student');
+
+headers.forEach(header => {
+    let newHeader = document.createElement('p');
+    newHeader.innerHTML = header;
+    newHeader.classList.add('header');
+    newHeader.setAttribute('data-target', header);
+
+    newHeader.addEventListener('mouseover', () => {
+        for (let square of document.querySelectorAll('div.grid-square')) {
+            if (square.getAttribute('data-target') !== newHeader.getAttribute('data-target')) {
+                square.classList.add('lowlight');
+            } else {
+                square.classList.remove('lowlight');
+                square.classList.add('wider');
+            }
+        }
+    })
+
+    newHeader.addEventListener('mouseleave', () => {
+        for (let square of document.querySelectorAll('div.grid-square')) {
+            square.classList.remove('lowlight');
+            square.classList.remove('wider');
+        }
+    })
+
+
+    dashboard.appendChild(newHeader);
+});
+
+function clearHover() {
+    while (hoverContainer.firstChild) {
+        hoverContainer.removeChild(hoverContainer.firstChild);
+    }
+}
+
+function studentMouseover(e) {
+    for (let square of document.querySelectorAll('div.grid-square')) {
+        if (square.getAttribute('data-student') !== e.target.getAttribute('data-student')) {
+            square.classList.add('lowlight');
+        } else {
+            square.classList.remove('lowlight');
+        }
+    }
+}
+
+function studentMouseleave() {
+    for (let square of document.querySelectorAll('div.grid-square')) {
+        square.classList.remove('lowlight');
+    }
+}
+
+function dashboardSquareHover(event) {
+    clearHover();
+
+    for (dataType of ['Student', 'Date', 'Target', 'Name', 'Sound', 'Read']) {
+        let dataName = `data-${dataType.toLowerCase()}`;
+        if (event.target.hasAttribute(dataName)) {
+            let newP = document.createElement('p');
+            newP.innerHTML = `${dataType}: ${event.target.getAttribute(dataName)}`;
+            hoverContainer.appendChild(newP);
+        }
+    }
+
+    hoverContainer.style.top = event.pageY + 'px';
+    hoverContainer.style.right = window.innerWidth - event.pageX + 'px';
+
+    hoverContainer.classList.remove('hidden');
+}
+
+function dashboardSquareMousemove(event) {
+    hoverContainer.style.top = event.pageY + 'px';
+    hoverContainer.style.right = window.innerWidth - event.pageX + 'px';
+}
+
+function dashboardSquareMouseleave() {
+    clearHover();
+    hoverContainer.classList.add('hidden');
+}
+
+students.forEach(student => {
+    // initial student name
+
+    let studentNameP = document.createElement('p');
+    studentNameP.innerHTML = student;
+    studentNameP.id = `student-name-${student}`;
+    studentNameP.setAttribute('data-student', student);
+
+    studentNameP.addEventListener('mouseover', studentMouseover);
+
+    studentNameP.addEventListener('mouseleave', studentMouseleave);
+
+    dashboard.appendChild(studentNameP);
+
+    // actual dashboard data
+
+    for (let header of headers) {
+        if (header === 'Student') {
+            continue;
+        }
+        if (dashboardType === 'numbers') {
+            header = 'n' + header;
+        }
+
+        let newGridSquare = document.createElement('div');
+        newGridSquare.classList.add('grid-square');
+
+        newGridSquare.setAttribute('data-student', student);
+        newGridSquare.setAttribute('data-date', studentSuccess['students'][student]['date']);
+        if (dashboardType === 'numbers') {
+            newGridSquare.setAttribute('data-target', header.replace('n', ''));
+        } else {
+            newGridSquare.setAttribute('data-target', header);
+        }
+        newGridSquare.id = `sq-${student}-${header}`;
+
+        let result = studentSuccess['students'][student]['results'][header]['success'];
+        if (dashboardType === 'words') {
+            result = { 'read': result['name'] };
+        }
+
+        let allCorrect = true;
+        if ('name' in result) {
+            newGridSquare.setAttribute('data-name', result.name ? 'Correct' : 'Incorrect');
+            if (!result.name) {
+                newGridSquare.classList.add('missing-name');
+                allCorrect = false;
+            }
+        }
+        if ('sound' in result) {
+            newGridSquare.setAttribute('data-sound', result.sound ? 'Correct' : 'Incorrect');
+            if (!result.sound) {
+                newGridSquare.classList.add('missing-sound');
+                allCorrect = false;
+            }
+        }
+        if ('read' in result) {
+            newGridSquare.setAttribute('data-read', result.read ? 'Correct' : 'Incorrect');
+            if (!result.read) {
+                newGridSquare.classList.add('missing-read');
+                allCorrect = false;
+            }
+        }
+        if (allCorrect) {
+            newGridSquare.classList.add('all-correct');
+        }
+
+        newGridSquare.addEventListener('mouseover', dashboardSquareHover);
+        newGridSquare.addEventListener('mousemove', dashboardSquareMousemove);
+        newGridSquare.addEventListener('mouseleave', dashboardSquareMouseleave);
+
+        dashboard.appendChild(newGridSquare);
+    }
+
+    // ending student name
+
+    let endStudentNameP = document.createElement('p');
+    endStudentNameP.innerHTML = student;
+    endStudentNameP.id = `student-name-${student}`;
+    endStudentNameP.setAttribute('data-student', student);
+
+    endStudentNameP.addEventListener('mouseover', studentMouseover);
+
+    endStudentNameP.addEventListener('mouseleave', studentMouseleave);
+
+    dashboard.appendChild(endStudentNameP);
+})
+
+const exampleSquares = document.querySelectorAll('div.example-square');
+exampleSquares.forEach(square => {
+    const squareType = square.getAttribute('data-example-of').split(',');
+
+    square.addEventListener('mouseover', () => {
+        for (let cell of document.querySelectorAll('div.grid-square')) {
+            for (let type of squareType) {
+                if (!cell.classList.contains(type)) {
+                    cell.classList.add('lowlight');
+                }
+            }
+        }
+    })
+
+    square.addEventListener('mouseleave', () => {
+        for (let cell of document.querySelectorAll('div.grid-square')) {
+            cell.classList.remove('lowlight');
+        }
+    })
+})

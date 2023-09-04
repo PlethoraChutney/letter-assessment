@@ -26,67 +26,62 @@ function shuffle(a) {
 }
 
 const student = document.querySelector('#student-name').innerText;
+const quizType = document.querySelector('#quiz-type').innerText;
 
 // Make arrays to keep track of targets
 
-const arrayLetters = Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+const arrayLetters = Array.from('AMSTPFINODCUGBEKHRLWJYXQVZ');
 
-let uppercaseLetterArray = []
-shuffle(arrayLetters).forEach(letter => {
-    uppercaseLetterArray.push({
+let uppercaseLetterQuiz = {};
+arrayLetters.forEach(letter => {
+    uppercaseLetterQuiz[letter] = {
         'targetChar': letter,
-        'targetType': 'name',
-        'handwritten': false,
-        'success': false
-    });
-    uppercaseLetterArray.push({
-        'targetChar': letter,
-        'targetType': 'sound',
-        'handwritten': false,
-        'success': false
-    });
+        'success': { 'name': undefined, 'sound': undefined }
+    };
 })
 
-let lowercaseLetterArray = [];
-shuffle(arrayLetters).forEach(letter => {
+let lowercaseLetterQuiz = {};
+arrayLetters.forEach(letter => {
     letter = letter.toLocaleLowerCase();
-    lowercaseLetterArray.push({
+    lowercaseLetterQuiz[letter] = {
         'targetChar': letter,
-        'targetType': 'name',
-        'handwritten': letter === 'e' || letter === 'q',
-        'success': false
-    });
+        'success': { 'name': undefined }
+    };
 })
 
-let integerArray = [];
-shuffle([...Array(21).keys()]).forEach(number => {
-    integerArray.push({
-        'targetChar': number,
-        'targetType': 'number',
-        'handwritten': false,
-        'success': false
-    });
+let integerQuiz = {};
+shuffle([...Array(21).keys()]).forEach(num => {
+    numString = 'n' + num;
+    integerQuiz[numString] = {
+        'targetChar': num,
+        'success': { 'name': undefined }
+    };
 })
+console.log(integerQuiz);
 
-let wordArray = [];
-// we don't want words to be shuffled
-['because', 'think', 'flip', 'cat'].forEach(word => {
-    wordArray.push({
+let wordQuiz = {};
+['cat', 'flip', 'think', 'because'].forEach(word => {
+    wordQuiz[word] = {
         'targetChar': word,
-        'targetType': 'word',
-        'handwritten': false,
-        'success': false
-    });
+        'success': { 'name': false }
+    };
 })
 
-const targetArray = [
-    uppercaseLetterArray,
-    lowercaseLetterArray,
-    integerArray,
-    wordArray
-].reduce((accumulator, currentValue) => {
-    return accumulator.concat(currentValue);
-});
+let targetQuiz;
+switch (quizType.toLocaleLowerCase()) {
+    case 'upper':
+        targetQuiz = uppercaseLetterQuiz;
+        break;
+    case 'lower':
+        targetQuiz = lowercaseLetterQuiz;
+        break;
+    case 'numbers':
+        targetQuiz = integerQuiz;
+        break;
+    case 'words':
+        targetQuiz = wordQuiz;
+        break;
+}
 
 // Determine result format
 
@@ -94,7 +89,7 @@ function sendResults() {
     sendRequest({
         'action': 'quiz_complete',
         'student': student,
-        'results': targetArray
+        'results': targetQuiz
     });
 }
 
@@ -102,40 +97,44 @@ function sendResults() {
 
 const bigText = document.querySelector('#quiz-target');
 const targetType = document.querySelector('#target-type');
+const quizKeys = Object.keys(targetQuiz);
 let currIndex = 0;
+let needSound = quizType.toLocaleLowerCase() === 'upper';
+let currTarget = 'name';
 let quizComplete = false;
 
-bigText.innerHTML = targetArray[currIndex].targetChar;
-targetType.innerHTML = targetArray[currIndex].targetType;
+bigText.innerHTML = targetQuiz[quizKeys[currIndex]].targetChar;
+targetType.innerHTML = currTarget;
 
 function markAndAdvance(success) {
-    targetArray[currIndex]['success'] = success;
-    currIndex++;
-
-    const newTarget = targetArray[currIndex];
-
-    bigText.innerHTML = newTarget.targetChar;
-    targetType.innerHTML = newTarget.targetType;
-
-    // handle font types
-    bigText.classList.remove('other-handwritten');
-    bigText.classList.remove('arial');
-    if (newTarget.handwritten) {
-        switch (newTarget.targetChar) {
-            case 'e':
-                bigText.classList.add('arial');
-                break;
-            case 'q':
-                bigText.classList.add('other-handwritten');
-                break;
-        }
+    targetQuiz[quizKeys[currIndex]]['success'][currTarget] = success;
+    if (currTarget === 'name' && needSound) {
+        currTarget = 'sound';
+    } else {
+        currTarget = 'name';
+        currIndex++;
     }
 
-    if (currIndex == targetArray.length - 1) {
+    if (currIndex == quizKeys.length) {
         quizComplete = true;
         bigText.innerHTML = 'Finished.';
         targetType.innerHTML = '';
         sendResults();
+        return;
+    }
+
+    const newTarget = targetQuiz[quizKeys[currIndex]];
+
+    bigText.innerHTML = newTarget.targetChar;
+    targetType.innerHTML = currTarget;
+
+    // handle font types
+    bigText.classList.remove('other-handwritten');
+    bigText.classList.remove('arial');
+    if (bigText.innerHTML === 'e') {
+        bigText.classList.add('arial');
+    } else if (bigText.innerHTML === 'q') {
+        bigText.classList.add('other-handwritten');
     }
 }
 

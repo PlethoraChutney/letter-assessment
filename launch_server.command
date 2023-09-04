@@ -1,5 +1,5 @@
-#!/bin/bash
+#!/bin/zsh
 cd $(dirname $0)
 source venv/bin/activate
-export FLASK_APP=run_quiz
+export FLASK_APP=letter_assessment
 flask run
