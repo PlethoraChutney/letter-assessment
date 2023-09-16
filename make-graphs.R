@@ -1,62 +1,10 @@
 library(tidyverse)
+library(gt)
+library(gtExtras)
 
 student_data <- read_csv("student-results.csv")
 
-processed_data <- student_data |>
-  filter(quiz_type %in% c("lower", "upper", "numbers")) |>
-  mutate(date = as.character(date)) |>
-  pivot_longer(cols = !quiz_type:type, names_to = "student", values_to = "success") |>
-  separate(date, into = c("year", "month", "day"), sep = "-") |>
-  mutate(day = as.numeric(day)) |>
-  group_by(student, month) |>
-  filter(day == max(day)) |>
-  select(-day) |>
-  ungroup() |>
-  group_by(year, month, student, quiz_type, type, success) |>
-  count() |>
-  pivot_wider(names_from = success, values_from = n) |>
-  replace_na(list("TRUE" = 0, "FALSE" = 0)) |>
-  mutate(prop = `TRUE` / (`FALSE` + `TRUE`)) |>
-  ungroup() |>
-  mutate(Category = case_when(
-    quiz_type == "upper" & type == "sound" ~ "Sound",
-    quiz_type == "upper" & type == "name" ~ "Uppercase",
-    quiz_type == "lower" ~ "Lowercase",
-    quiz_type == "numbers" ~ "Number"
-  )) |>
-  select(year, month, student, Category, prop)
-
-
-processed_data |>
-  mutate(month = paste(year, month, sep = "-")) |>
-  mutate(Category = fct_relevel(Category, "Uppercase", "Lowercase", "Sound", "Number")) |>
-  ggplot(aes(month, prop)) +
-  facet_grid(rows = vars(student), cols = vars(Category)) +
-  theme_minimal() +
-  theme(
-    panel.grid.major.x = element_blank(),
-    panel.grid.minor.x = element_blank(),
-    legend.position = "none",
-    panel.spacing = unit(2, "lines")
-  ) +
-  scale_y_continuous(
-    sec.axis = sec_axis(~., breaks = c(0, 0.5, 1)),
-    breaks = c(0, 0.5, 1.0)
-  ) +
-  geom_col(aes(fill = Category), color = "black") +
-  MetBrewer::scale_fill_met_d("Johnson") +
-  labs(
-    x = "Month",
-    y = "Proportion Correct"
-  ) +
-  expand_limits(y = 1)
-ggsave("static/student_plot.svg", width = 10, height = 30)
-
-
 # Table -------------------------------------------------------------------
-
-library(gt)
-library(gtExtras)
 
 table_data <- student_data |>
   pivot_longer(cols = !quiz_type:type, names_to = "student", values_to = "success") |>
