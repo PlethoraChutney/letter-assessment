@@ -1,11 +1,15 @@
 // studentSuccess is defined in the template dashboard.html
 // dashboardType is defined in the template dashboard.html
-console.log(studentSuccess);
 const students = Object.keys(studentSuccess.students);
 const dashboard = document.querySelector('#dashboard');
 const hoverContainer = document.querySelector('#hover-container');
 
-dashboard.style.gridTemplateColumns = `75px repeat(${studentSuccess.unique_vals.length}, 30px) 75px`;
+if (dashboardType === 'words') {
+    dashboard.style.width = '50vw';
+    dashboard.style.gridTemplateColumns = `75px repeat(${studentSuccess.unique_vals.length}, 1fr) 75px`;
+} else {
+    dashboard.style.gridTemplateColumns = `75px repeat(${studentSuccess.unique_vals.length}, 30px) 75px`;
+}
 
 headers = studentSuccess.unique_vals;
 if (dashboardType === 'numbers') {
