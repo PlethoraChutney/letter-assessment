@@ -18,6 +18,25 @@ table_data <- student_data |>
     TRUE ~ paste(quiz_type, type)
   ))
 
+ensure_all_columns <- function(data) {
+  types <- c('Uppercase', 'Lowercase', 'Sound', 'Words', 'Number')
+  necessary_columns <- paste(
+    rep(types, each = 2),
+    rep(c('Percent', 'Success'), times = length(types)),
+    sep = '.'
+  )
+  
+  for (column_name in necessary_columns) {
+    if (!(column_name %in% colnames(data))) {
+      column_name = enquo(column_name)
+      data <- data |> 
+        mutate(!!column_name := NA)
+    }
+  }
+  
+  data
+}
+
 table_data |>
   group_by(date, student, category) |>
   rename("Date" = date) |>
@@ -30,16 +49,29 @@ table_data |>
     names_from = category,
     values_from = c(Success, Percent),
     names_glue = "{category}.{.value}"
-  ) |>
+  ) |> 
+  ensure_all_columns() |>
   select(
-    starts_with("Uppercase"),
-    starts_with("Lowercase"),
-    starts_with("Sound"),
-    starts_with("Number"),
-    starts_with("Word")
-  ) |>
+    ends_with('Percent'),
+    ends_with('Success')
+  ) |> 
   arrange(student) |>
-  group_by(student) |>
+  group_by(student) |> 
+  filter(
+    !if_all(
+      contains('Success'),
+      is.na
+    )
+  ) |> 
+  relocate(
+    Date,
+    student,
+    contains('Lowercase'),
+    contains('Uppercase'),
+    contains('Sound'),
+    contains('Number'),
+    contains('Words')
+  ) |> 
   gt(
     rowname_col = "Date"
   ) |>
@@ -70,31 +102,40 @@ table_data |>
     table_body.vlines.color = "white",
     stub.border.width = 0
   ) |>
+  # apply this to all NA cells first, because if there are *no* non-NA values
+  # the NA color never gets applied.
   data_color(
+    na_color = '#EFEFEF'
+  ) |> 
+  data_color(
+    method = 'numeric',
+    na_color= '#EFEFEF',
     columns = contains("Percent"),
     palette = "Blues",
-    domain = c(0, 1),
-    na_color = "#E2E2E2"
+    domain = c(0, 1)
   ) |>
   data_color(
+    method = 'numeric',
+    na_color= '#EFEFEF',
     columns = c("Lowercase.Success", "Sound.Success", "Uppercase.Success"),
     palette = "Blues",
-    domain = 0:26,
-    na_color = "#E2E2E2"
+    domain = 0:26
   ) |>
   data_color(
+    method = 'numeric',
+    na_color= '#EFEFEF',
     columns = c("Number.Success"),
     palette = "Blues",
-    domain = 0:21,
-    na_color = "#E2E2E2"
+    domain = 0:21
   ) |>
   data_color(
+    method = 'numeric',
+    na_color= '#EFEFEF',
     columns = "Words.Success",
     palette = "Blues",
-    domain = 0:4,
-    na_color = "#E2E2E2"
-  ) |>
-  sub_missing() |>
+    domain = 0:4
+  ) |> 
+  sub_missing() |> 
   gtsave(
     "static/student_table.html"
   )
