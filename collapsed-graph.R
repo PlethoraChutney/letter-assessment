@@ -47,6 +47,8 @@ table_data |>
   ) |>
   # collapse all to first of the month
   filter(!is.na(Percent)) |> 
+  group_by(student, category) |> 
+  filter(Date == max(Date)) |> 
   mutate(Date = floor_date(Date, unit = 'months')) |> 
   pivot_wider(
     names_from = category,
@@ -55,6 +57,8 @@ table_data |>
   ) |> 
   ensure_all_columns() |>
   select(
+    Date,
+    student,
     ends_with('Percent'),
     ends_with('Success')
   ) |> 
