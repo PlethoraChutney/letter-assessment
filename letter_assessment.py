@@ -244,7 +244,12 @@ def api(action):
         response.headers["Content-Type"] = "text/csv"
         return response
     elif action == "make-table":
+        table_type = request.args.get("type", "full")
         db.make_df().to_csv("student-results.csv", index=True)
-        subprocess.run(["Rscript", "make-graphs.R"])
+
+        if table_type == "full":
+            subprocess.run(["Rscript", "make-graphs.R"])
+        elif table_type == "collapsed":
+            subprocess.run(["Rscript", "collapsed-graph.R"])
 
         return redirect("/static/student_table.html", code=302)
