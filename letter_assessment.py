@@ -85,6 +85,8 @@ class Database(object):
 
     def generate_dashboard_data(self, dashboard_type):
         dashboard_data = {"students": {}}
+
+        unique_vals = []
         for kid_name in self.kids:
             try:
                 kid = self.get_kid(kid_name)
@@ -97,9 +99,42 @@ class Database(object):
                 unique_vals = list(getattr(kid, dashboard_type).keys())
             except KeyError:
                 continue
-        unique_vals.sort()
-        dashboard_data["unique_vals"] = unique_vals
 
+        if dashboard_type == "words":
+            unique_vals = [
+                "mat",
+                "map",
+                "fit",
+                "tin",
+                "pan",
+                "pop",
+                "dim",
+                "cap",
+                "sun",
+                "fog",
+                "big",
+                "get",
+                "mops",
+                "dogs",
+                "skip",
+                "desk",
+                "hunt",
+                "raft",
+                "brag",
+                "lost",
+                "clip",
+                "melt",
+                "wind",
+                "twig",
+                "jump",
+                "yelp",
+                "flex",
+                "quit",
+                "vest",
+                "zest",
+            ]
+
+        dashboard_data["unique_vals"] = unique_vals
         return dashboard_data
 
 

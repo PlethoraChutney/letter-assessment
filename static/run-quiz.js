@@ -57,10 +57,41 @@ shuffle([...Array(21).keys()]).forEach(num => {
         'success': { 'name': undefined }
     };
 })
-console.log(integerQuiz);
 
+const wordArray = [
+    'mat',
+    'map',
+    'fit',
+    'tin',
+    'pan',
+    'pop',
+    'dim',
+    'cap',
+    'sun',
+    'fog',
+    'big',
+    'get',
+    'mops',
+    'dogs',
+    'skip',
+    'desk',
+    'hunt',
+    'raft',
+    'brag',
+    'lost',
+    'clip',
+    'melt',
+    'wind',
+    'twig',
+    'jump',
+    'yelp',
+    'flex',
+    'quit',
+    'vest',
+    'zest'
+]
 let wordQuiz = {};
-['cat', 'flip', 'think', 'because'].forEach(word => {
+wordArray.forEach(word => {
     wordQuiz[word] = {
         'targetChar': word,
         'success': { 'name': false }
@@ -98,6 +129,8 @@ function sendResults() {
 const bigText = document.querySelector('#quiz-target');
 const targetType = document.querySelector('#target-type');
 const quizKeys = Object.keys(targetQuiz);
+let numberMissed = 0;
+let missedEnoughWords = false;
 let currIndex = 0;
 let needSound = quizType.toLocaleLowerCase() === 'upper';
 let currTarget = 'name';
@@ -108,6 +141,8 @@ targetType.innerHTML = currTarget;
 
 function markAndAdvance(success) {
     targetQuiz[quizKeys[currIndex]]['success'][currTarget] = success;
+    numberMissed += !success;
+
     if (currTarget === 'name' && needSound) {
         currTarget = 'sound';
     } else {
@@ -115,7 +150,9 @@ function markAndAdvance(success) {
         currIndex++;
     }
 
-    if (currIndex == quizKeys.length) {
+    missedEnoughWords = quizType.toLocaleLowerCase() === 'words' && numberMissed === 3;
+
+    if (currIndex == quizKeys.length || missedEnoughWords) {
         quizComplete = true;
         bigText.innerHTML = 'Finished.';
         targetType.innerHTML = '';
