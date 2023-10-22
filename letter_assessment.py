@@ -3,9 +3,12 @@
 import json
 from datetime import date
 from flask import Flask, render_template, request, make_response, redirect
-from string import ascii_letters
 import pandas as pd
 import subprocess
+from pathlib import Path
+
+with open(Path("static", "words.json"), "r") as f:
+    words_dict = json.load(f)
 
 
 def generate_default_dict(name):
@@ -15,6 +18,7 @@ def generate_default_dict(name):
         "upper": {},
         "lower": {},
         "words": {},
+        "heart_words": {},
         "numbers": {},
         "cvc": {},
         "ccvc": {},
@@ -101,38 +105,7 @@ class Database(object):
                 continue
 
         if dashboard_type == "words":
-            unique_vals = [
-                "mat",
-                "map",
-                "fit",
-                "tin",
-                "pan",
-                "pop",
-                "dim",
-                "cap",
-                "sun",
-                "fog",
-                "big",
-                "get",
-                "mops",
-                "dogs",
-                "skip",
-                "desk",
-                "hunt",
-                "raft",
-                "brag",
-                "lost",
-                "clip",
-                "melt",
-                "wind",
-                "twig",
-                "jump",
-                "yelp",
-                "flex",
-                "quit",
-                "vest",
-                "zest",
-            ]
+            unique_vals = words_dict["words"]
 
         dashboard_data["unique_vals"] = unique_vals
         return dashboard_data
