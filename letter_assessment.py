@@ -70,7 +70,6 @@ class Database(object):
     def update_kid(self, kid_name: str, test_type: str, new_results: dict) -> None:
         kid = self.get_kid(kid_name)
         kid.new_test(test_type, new_results)
-        print(new_results)
         self.save_kid(kid)
         self.save()
 
@@ -94,6 +93,7 @@ class Database(object):
         for kid_name in self.kids:
             try:
                 kid = self.get_kid(kid_name)
+                print(kid.latest_tests)
                 dashboard_data["students"][kid_name] = {
                     "date": kid.latest_tests[dashboard_type],
                     "results": getattr(kid, dashboard_type),
@@ -108,6 +108,7 @@ class Database(object):
             unique_vals = list(words_dict["words"].keys())
 
         dashboard_data["unique_vals"] = unique_vals
+        print(dashboard_data)
         return dashboard_data
 
 
@@ -118,6 +119,7 @@ class Kid(object):
         self.upper_tests = kid_dict.get("upper")
         self.lower_tests = kid_dict.get("lower")
         self.words_tests = kid_dict.get("words")
+        self.heart_words_tests = kid_dict.get("heart_words")
         self.numbers_tests = kid_dict.get("numbers")
         self.cvc_tests = kid_dict.get("cvc")
         self.ccvc_tests = kid_dict.get("ccvc")
@@ -126,6 +128,7 @@ class Kid(object):
             "upper",
             "lower",
             "words",
+            "heart_words",
             "numbers",
             "cvc",
             "ccvc",
@@ -140,6 +143,7 @@ class Kid(object):
             "upper": self.upper_tests,
             "lower": self.lower_tests,
             "words": self.words_tests,
+            "heart_words": self.heart_words_tests,
             "numbers": self.numbers_tests,
             "cvc": self.cvc_tests,
             "ccvc": self.ccvc_tests,
@@ -157,6 +161,10 @@ class Kid(object):
     @property
     def words(self) -> dict:
         return self.words_tests.get(self.latest_tests.get("words"))
+
+    @property
+    def heart_words(self) -> dict:
+        return self.heart_words_tests.get(self.latest_tests.get("heart_words"))
 
     @property
     def numbers(self) -> dict:
@@ -200,6 +208,8 @@ class Kid(object):
 
         self.latest_tests[test_type] = str(date.today())
         test_dict = getattr(self, f"{test_type}_tests")
+        if test_dict is None:
+            test_dict = {}
         test_dict[str(date.today())] = new_results
         setattr(self, f"{test_type}_tests", test_dict)
 

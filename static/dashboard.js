@@ -5,7 +5,7 @@ const students = Object.keys(studentSuccess.students);
 const dashboard = document.querySelector('#dashboard');
 const hoverContainer = document.querySelector('#hover-container');
 
-if (dashboardType === 'words') {
+if (dashboardType === 'words' || dashboardType === 'heart_words') {
     dashboard.style.width = '90vw';
     dashboard.style.gridTemplateColumns = `75px repeat(${studentSuccess.unique_vals.length}, 1fr) 75px`;
 } else {
@@ -34,7 +34,7 @@ headers.forEach(header => {
                 square.classList.add('lowlight');
             } else {
                 square.classList.remove('lowlight');
-                if (dashboardType !== 'words') {
+                if (dashboardType !== 'words' && dashboardType !== 'heart_words') {
                     square.classList.add('wider');
                 }
             }

@@ -68,6 +68,15 @@ wordArray.forEach(word => {
     };
 })
 
+const heartWordArray = wordsDict.heart_words
+let heartWordQuiz = {};
+heartWordArray.forEach(word => {
+    heartWordQuiz[word] = {
+        'targetChar': word,
+        'success': { 'name': false }
+    }
+})
+
 let targetQuiz;
 switch (quizType.toLocaleLowerCase()) {
     case 'upper':
@@ -81,6 +90,9 @@ switch (quizType.toLocaleLowerCase()) {
         break;
     case 'words':
         targetQuiz = wordQuiz;
+        break;
+    case 'heart_words':
+        targetQuiz = heartWordQuiz;
         break;
 }
 
