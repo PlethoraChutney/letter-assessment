@@ -27,6 +27,12 @@ function shuffle(a) {
 
 const student = document.querySelector('#student-name').innerText;
 const quizType = document.querySelector('#quiz-type').innerText;
+let missThreshold = 0;
+if (quizType.toLowerCase() === 'words') {
+    missThreshold = 3;
+} else if (quizType.toLowerCase() === 'heart_words') {
+    missThreshold = 5;
+}
 
 // Make arrays to keep track of targets
 
@@ -132,7 +138,7 @@ function markAndAdvance(success) {
         currIndex++;
     }
 
-    missedEnoughWords = quizType.toLocaleLowerCase() === 'words' && numberMissed === 3;
+    missedEnoughWords = missThreshold !== 0 && numberMissed === missThreshold;
 
     if (currIndex == quizKeys.length || missedEnoughWords) {
         quizComplete = true;
