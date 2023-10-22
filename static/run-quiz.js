@@ -58,38 +58,8 @@ shuffle([...Array(21).keys()]).forEach(num => {
     };
 })
 
-const wordArray = [
-    'mat',
-    'map',
-    'fit',
-    'tin',
-    'pan',
-    'pop',
-    'dim',
-    'cap',
-    'sun',
-    'fog',
-    'big',
-    'get',
-    'mops',
-    'dogs',
-    'skip',
-    'desk',
-    'hunt',
-    'raft',
-    'brag',
-    'lost',
-    'clip',
-    'melt',
-    'wind',
-    'twig',
-    'jump',
-    'yelp',
-    'flex',
-    'quit',
-    'vest',
-    'zest'
-]
+// wordsDict defined in template
+const wordArray = Object.keys(wordsDict.words);
 let wordQuiz = {};
 wordArray.forEach(word => {
     wordQuiz[word] = {

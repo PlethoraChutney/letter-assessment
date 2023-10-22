@@ -1,41 +1,9 @@
 // studentSuccess is defined in the template dashboard.html
 // dashboardType is defined in the template dashboard.html
+// lessonNumbers is defined in template
 const students = Object.keys(studentSuccess.students);
 const dashboard = document.querySelector('#dashboard');
 const hoverContainer = document.querySelector('#hover-container');
-
-const lessonNumbers = {
-    'mat': 4,
-    'map': 6,
-    'fit': 8,
-    'tin': 9,
-    'pan': 11,
-    'pop': 12,
-    'dim': 13,
-    'cap': 14,
-    'sun': 15,
-    'fog': 16,
-    'big': 17,
-    'get': 18,
-    'mops': 20,
-    'dogs': 21,
-    'skip': 22,
-    'desk': 22,
-    'hunt': 23,
-    'raft': 24,
-    'brag': 25,
-    'lost': 26,
-    'clip': 27,
-    'melt': 27,
-    'wind': 28,
-    'twig': 28,
-    'jump': 29,
-    'yelp': 30,
-    'flex': 31,
-    'quit': 32,
-    'vest': 33,
-    'zest': 34
-};
 
 if (dashboardType === 'words') {
     dashboard.style.width = '90vw';

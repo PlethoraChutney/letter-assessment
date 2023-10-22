@@ -105,7 +105,7 @@ class Database(object):
                 continue
 
         if dashboard_type == "words":
-            unique_vals = words_dict["words"]
+            unique_vals = list(words_dict["words"].keys())
 
         dashboard_data["unique_vals"] = unique_vals
         return dashboard_data
@@ -216,7 +216,12 @@ def index():
 @app.route("/quiz/<quiz_type>/<student>", methods=["GET", "POST"])
 def quiz(quiz_type, student):
     if request.method == "GET":
-        return render_template(f"quiz.html", student=student, type=quiz_type)
+        return render_template(
+            "quiz.html",
+            student=student,
+            type=quiz_type,
+            words_dict=json.dumps(words_dict),
+        )
     elif request.method == "POST":
         rq = request.get_json()
         if rq["action"] == "quiz_complete":
@@ -231,6 +236,7 @@ def dashboard(dashboard_type):
         "dashboard.html",
         dashboard_type=json.dumps(dashboard_type),
         success_strings=json.dumps(success_strings),
+        lesson_numbers=json.dumps(words_dict["words"]),
     )
 
 
