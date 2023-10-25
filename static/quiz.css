@@ -1,14 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Edu+QLD+Beginner&family=Montserrat&family=Comic+Neue&display=swap');
 
+@font-face {
+    font-family: "Lexend";
+    src:
+        url("https://posertinlab.com/fonts/lexend-extralight.woff2") format("woff2"),
+        url("https://posertinlab.com/fonts/lexend-extralight.ttf") format('ttf');
+}
+
 html {
     margin: 0;
     padding: 0;
     height: 100vh;
     width: 100vw;
+    font-family: 'Lexend', sans-serif;
 }
 
 body {
-    font-family: sans-serif;
     margin: 0;
     padding: 0;
     height: 100%;
@@ -26,7 +33,6 @@ div#container {
 }
 
 #quiz-target {
-    font-family: 'Comic Neue', sans-serif;
     font-size: 256pt;
     margin: auto auto;
     line-height: 1;
@@ -42,10 +48,6 @@ p#quiz-target.is-a-word {
 
 p#quiz-target.finished {
     font-family: 'Montserrat', sans-serif;
-}
-
-p#quiz-target.arial {
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 p#quiz-target.other-handwritten {

@@ -93,7 +93,6 @@ class Database(object):
         for kid_name in self.kids:
             try:
                 kid = self.get_kid(kid_name)
-                print(kid.latest_tests)
                 dashboard_data["students"][kid_name] = {
                     "date": kid.latest_tests[dashboard_type],
                     "results": getattr(kid, dashboard_type),
@@ -108,7 +107,6 @@ class Database(object):
             unique_vals = list(words_dict["words"].keys())
 
         dashboard_data["unique_vals"] = unique_vals
-        print(dashboard_data)
         return dashboard_data
 
 
@@ -186,7 +184,10 @@ class Kid(object):
     def data_frame(self) -> pd.DataFrame:
         list_of_dicts = []
         for quiz_type in self.accepted_test_types:
-            for date, results in getattr(self, f"{quiz_type}_tests").items():
+            tests = getattr(self, f"{quiz_type}_tests")
+            if tests is None:
+                continue
+            for date, results in tests.items():
                 for target in results.values():
                     for success_type, success_value in target["success"].items():
                         list_of_dicts.append(

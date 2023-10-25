@@ -6,8 +6,7 @@ const dashboard = document.querySelector('#dashboard');
 const hoverContainer = document.querySelector('#hover-container');
 
 if (dashboardType === 'words' || dashboardType === 'heart_words') {
-    dashboard.style.width = '90vw';
-    dashboard.style.gridTemplateColumns = `75px repeat(${studentSuccess.unique_vals.length}, 1fr) 75px`;
+    dashboard.style.gridTemplateColumns = `75px repeat(${studentSuccess.unique_vals.length}, 2.5rem) 75px`;
 } else {
     dashboard.style.gridTemplateColumns = `75px repeat(${studentSuccess.unique_vals.length}, 30px) 75px`;
 }

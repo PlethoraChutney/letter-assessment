@@ -1,7 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
+@font-face {
+    font-family: "Lexend";
+    src:
+        url("https://posertinlab.com/fonts/lexend-extralight.woff2") format("woff2"),
+        url("https://posertinlab.com/fonts/lexend-extralight.ttf") format('ttf');
+}
+
 html {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lexend', 'Montserrat', sans-serif;
     font-size: 16pt;
 }
 
@@ -30,6 +37,10 @@ hr {
     grid-template-columns: 1fr;
     width: max-content;
     padding-top: 10px;
+}
+
+#student-list-holder::-webkit-scrollbar {
+    display: none;
 }
 
 div.v-flex {

@@ -15,11 +15,12 @@ table_data <- student_data |>
     quiz_type == "lower" ~ "Lowercase",
     quiz_type == "numbers" ~ "Number",
     quiz_type == "words" ~ "Words",
+    quiz_type == "heart_words" ~ "Heart Words",
     TRUE ~ paste(quiz_type, type)
   ))
 
 ensure_all_columns <- function(data) {
-  types <- c("Uppercase", "Lowercase", "Sound", "Words", "Number")
+  types <- c("Uppercase", "Lowercase", "Sound", "Words", "Number", "Heart Words")
   necessary_columns <- paste(
     rep(types, each = 2),
     rep(c("Percent", "Success"), times = length(types)),
@@ -70,7 +71,8 @@ table_data |>
     contains("Uppercase"),
     contains("Sound"),
     contains("Number"),
-    contains("Words")
+    starts_with("Words"),
+    contains("Heart")
   ) |>
   gt(
     rowname_col = "Date"
@@ -94,6 +96,11 @@ table_data |>
     "Words.Success",
     decimals = 0,
     pattern = "{x}/30"
+  ) |>
+  fmt_number(
+    "Heart Words.Success",
+    decimals = 0,
+    pattern = "{x}/52"
   ) |>
   tab_options(
     row_group.border.top.width = 2,
@@ -134,6 +141,13 @@ table_data |>
     columns = "Words.Success",
     palette = "Blues",
     domain = 0:30
+  ) |>
+  data_color(
+    method = "numeric",
+    na_color = "#EFEFEF",
+    columns = "Heart Words.Success",
+    palette = "Blues",
+    domain = 0:52
   ) |>
   sub_missing() |>
   gtsave(

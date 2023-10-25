@@ -155,10 +155,7 @@ function markAndAdvance(success) {
 
     // handle font types
     bigText.classList.remove('other-handwritten');
-    bigText.classList.remove('arial');
-    if (bigText.innerHTML === 'e') {
-        bigText.classList.add('arial');
-    } else if (bigText.innerHTML === 'q') {
+    if (bigText.innerHTML === 'q') {
         bigText.classList.add('other-handwritten');
     }
 }

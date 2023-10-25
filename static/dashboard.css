@@ -1,28 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
+@font-face {
+    font-family: "Lexend";
+    src:
+        url("https://posertinlab.com/fonts/lexend-extralight.woff2") format("woff2"),
+        url("https://posertinlab.com/fonts/lexend-extralight.ttf") format('ttf');
+}
+
 h1 {
     width: max-content;
     margin: 20px auto;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lexend', 'Montserrat', sans-serif;
 }
 
 #dashboard {
     display: grid;
     width: max-content;
     margin: auto;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lexend', 'Montserrat', sans-serif;
 }
 
 #dashboard>p {
     width: 100%;
     text-align: center;
     margin: 0;
-    padding: 7px 2px;
+    padding: 7px 0;
     user-select: none;
 }
 
 p {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lexend', 'Montserrat', sans-serif;
 }
 
 p.header {
@@ -101,7 +108,7 @@ div#updater-container {
 div#updater-container>h2 {
     margin: auto;
     text-align: center;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lexend', 'Montserrat', sans-serif;
 }
 
 .hidden {
