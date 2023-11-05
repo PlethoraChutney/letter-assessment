@@ -73,6 +73,26 @@ function studentMouseleave() {
     }
 }
 
+function setHoverOffset(xCoord, yCoord) {
+    let boxWidth = hoverContainer.offsetWidth;
+    let boxHeight = hoverContainer.offsetHeight;
+    if (xCoord >= (boxWidth + scrollX + 20)) {
+        hoverContainer.style.right = window.innerWidth - xCoord + 'px';
+        hoverContainer.style.removeProperty('left');
+    } else {
+        hoverContainer.style.removeProperty('right');
+        hoverContainer.style.left = xCoord + 'px';
+    }
+
+    if (yCoord >= (boxHeight + scrollY + 20)) {
+        hoverContainer.style.removeProperty('top');
+        hoverContainer.style.bottom = window.innerHeight - yCoord + 'px';
+    } else {
+        hoverContainer.style.removeProperty('bottom');
+        hoverContainer.style.top = yCoord + 'px';
+    }
+}
+
 function dashboardSquareHover(event) {
     clearHover();
 
@@ -85,15 +105,13 @@ function dashboardSquareHover(event) {
         }
     }
 
-    hoverContainer.style.top = event.pageY + 'px';
-    hoverContainer.style.right = window.innerWidth - event.pageX + 'px';
+    setHoverOffset(event.pageX, event.pageY);
 
     hoverContainer.classList.remove('hidden');
 }
 
 function dashboardSquareMousemove(event) {
-    hoverContainer.style.top = event.pageY + 'px';
-    hoverContainer.style.right = window.innerWidth - event.pageX + 'px';
+    setHoverOffset(event.pageX, event.pageY);
 }
 
 function dashboardSquareMouseleave() {
