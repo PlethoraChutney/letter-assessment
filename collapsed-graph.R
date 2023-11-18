@@ -8,7 +8,6 @@ student_data <- read_csv("student-results.csv")
 
 table_data <- student_data |>
   pivot_longer(cols = !quiz_type:type, names_to = "student", values_to = "success") |>
-  filter(student != "Test") |>
   mutate(category = case_when(
     quiz_type == "upper" & type == "sound" ~ "Sound",
     quiz_type == "upper" & type == "name" ~ "Uppercase",
@@ -48,9 +47,11 @@ table_data |>
   ) |>
   # collapse all to first of the month
   filter(!is.na(Percent)) |>
-  group_by(student, category) |>
+  mutate(Month = month(Date)) |> 
+  group_by(student, category, Month) |>
   filter(Date == max(Date)) |>
-  mutate(Date = floor_date(Date, unit = "months")) |>
+  group_by(student, category) |> 
+  select(-Month) |> 
   pivot_wider(
     names_from = category,
     values_from = c(Success, Percent),
@@ -80,7 +81,7 @@ table_data |>
     contains("Number"),
     starts_with("Words"),
     contains("Heart")
-  ) |>
+  ) |> 
   gt(
     rowname_col = "Date"
   ) |>
@@ -123,6 +124,7 @@ table_data |>
   # apply this to all NA cells first, because if there are *no* non-NA values
   # the NA color never gets applied.
   data_color(
+    method = "numeric",
     na_color = "#EFEFEF"
   ) |>
   data_color(
