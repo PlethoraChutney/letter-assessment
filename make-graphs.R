@@ -74,8 +74,10 @@ table_data |>
     starts_with("Words"),
     contains("Heart")
   ) |>
+  # GT section starts here --------------------------
   gt(
-    rowname_col = "Date"
+    rowname_col = "Date",
+    id = 'st-table'
   ) |>
   tab_spanner_delim(delim = ".") |>
   fmt_percent(
@@ -150,6 +152,21 @@ table_data |>
     domain = 0:52
   ) |>
   sub_missing() |>
+  opt_css(
+    css = "
+      .cell-output-display {
+        overflow-x: unset !important;
+      }
+      div#st-table {
+        overflow-x: unset !important;
+        overflow-y: unset !important;
+      }
+      #st-table thead {
+        position: sticky !important;
+        top: 0 !important;
+      }
+    "
+  ) |> 
   gtsave(
     "static/student_table.html"
   )

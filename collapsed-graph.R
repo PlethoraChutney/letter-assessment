@@ -52,6 +52,7 @@ table_data |>
   filter(Date == max(Date)) |>
   group_by(student, category) |> 
   select(-Month) |> 
+  mutate(Date = lubridate::floor_date(Date, unit = 'months')) |> 
   pivot_wider(
     names_from = category,
     values_from = c(Success, Percent),
@@ -82,8 +83,10 @@ table_data |>
     starts_with("Words"),
     contains("Heart")
   ) |> 
+  # GT section starts here ------------------------------
   gt(
-    rowname_col = "Date"
+    rowname_col = "Date",
+    id = "st-table"
   ) |>
   tab_spanner_delim(delim = ".") |>
   fmt_percent(
@@ -163,6 +166,21 @@ table_data |>
     domain = 0:52
   ) |>
   sub_missing() |>
+  opt_css(
+    css = "
+      .cell-output-display {
+        overflow-x: unset !important;
+      }
+      div#st-table {
+        overflow-x: unset !important;
+        overflow-y: unset !important;
+      }
+      #st-table thead {
+        position: sticky !important;
+        top: 0 !important;
+      }
+    "
+  ) |> 
   gtsave(
     "static/student_table.html"
   )
