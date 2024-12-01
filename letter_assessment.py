@@ -238,8 +238,11 @@ class Kid(object):
             raise KeyError(f"{self.name} has no tests of type {test_type}")
         assert date in test_dict, f"{date} not in {test_type} tests"
         del test_dict[date]
-        new_max = max(list(test_dict.keys()))
-        self.latest_tests[test_type] = new_max
+        try:
+            new_max = max(list(test_dict.keys()))
+            self.latest_tests[test_type] = new_max
+        except ValueError:
+            del self.latest_tests[test_type]
         setattr(self, f"{test_type}_tests", test_dict)
 
 
