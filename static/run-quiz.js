@@ -108,7 +108,8 @@ function sendResults() {
     sendRequest({
         'action': 'quiz_complete',
         'student': student,
-        'results': targetQuiz
+        'results': targetQuiz,
+        'version': "2024-2025"
     });
 }
 

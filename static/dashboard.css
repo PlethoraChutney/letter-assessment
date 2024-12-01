@@ -90,6 +90,14 @@ div#hover-container {
     width: max-content;
 }
 
+div#hover-container.missing {
+    background-color: #DFDFDF;
+    font-style: italic;
+    color: #999999;
+    opacity: 0.7;
+    border: none;
+}
+
 div#updater-container {
     position: absolute;
     margin: auto;

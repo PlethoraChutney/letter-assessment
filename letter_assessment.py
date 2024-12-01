@@ -14,6 +14,7 @@ with open(Path("static", "words.json"), "r") as f:
 def generate_default_dict(name):
     return {
         "name": name,
+        "deleted": False,
         "latest_tests": {},
         "upper": {},
         "lower": {},
@@ -41,19 +42,27 @@ class Database(object):
 
     @property
     def kids(self):
-        kid_names = list(self.db["kids"].keys())
+        kid_names = list(k for k, v in self.db["kids"].items() if not v.get("deleted", False))
         kid_names.sort()
         return kid_names
 
-    def new_kid(self, kid_name) -> bool:
+    def new_kid(self, kid_name) -> dict:
+        if "!" in kid_name:
+            kid_name = kid_name.replace("!", "")
+        elif existing_kid := self.db["kids"].get(kid_name, False):
+            try:
+                latest_test = max(list(self.db["kids"][kid_name]["latest_tests"].values()))
+            except ValueError:
+                latest_test = "never"
+            return {"success": False, "result": "existing", "latest_test": latest_test, "kid_name": kid_name}
         kid_dict = generate_default_dict(kid_name)
         kid_dict["name"] = kid_name
         self.db["kids"][kid_name] = kid_dict
         self.save()
-        return True
+        return {"success": True, "result": "OK", "latest_test": None, "kid_name": kid_name}
 
     def delete_kid(self, kid_name) -> bool:
-        del self.db["kids"][kid_name]
+        self.db["kids"][kid_name]["deleted"] = True
         self.save()
         return True
 
@@ -77,7 +86,8 @@ class Database(object):
         list_of_dicts = []
         for kid_name in self.kids:
             kid = self.get_kid(kid_name)
-            list_of_dicts.extend(kid.data_frame)
+            if not kid.deleted:
+                list_of_dicts.extend(kid.data_frame)
 
         df = pd.DataFrame(list_of_dicts)
         return df.pivot(
@@ -132,6 +142,7 @@ class Kid(object):
             "ccvc",
             "digraphs",
         ]
+        self.deleted = kid_dict.get("deleted", False)
 
     @property
     def dict(self) -> dict:
@@ -255,8 +266,11 @@ def dashboard(dashboard_type):
 def api(action):
     if action == "add-kid":
         rq = request.get_json()
-        success = db.new_kid(rq["kid_name"])
-        return "success" if success else "failure", 200
+        result = db.new_kid(rq["kid_name"])
+        if result["success"]:
+            return json.dumps(result), 200
+        else:
+            return json.dumps(result), 409
     elif action == "delete-kid":
         rq = request.get_json()
         success = db.delete_kid(rq["kid_name"])

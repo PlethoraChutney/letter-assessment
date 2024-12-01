@@ -114,7 +114,7 @@ table_data |>
   # apply this to all NA cells first, because if there are *no* non-NA values
   # the NA color never gets applied.
   data_color(
-    na_color = "#EFEFEF"
+    fn = \(x) rep("#EFEFEF", length(x))
   ) |>
   data_color(
     method = "numeric",

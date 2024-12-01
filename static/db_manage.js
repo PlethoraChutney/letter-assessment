@@ -45,10 +45,17 @@ function newKid() {
     if (kidName.length > 0) {
         sendRequest('/api/add-kid', {
             'kid_name': kidName
-        }).then(() => {
-            studentList.push(kidName);
-            refreshList();
-        });
+        }).then((response) => {
+            return response.json();
+        }).then((r) => {
+            console.log(r);
+            if (r.success) {
+                studentList.push(r.kid_name);
+                refreshList();
+            } else {
+                alert(`${kidName} already in the database! They were last quizzed on ${r.latest_test}. To replace them, re-enter their name with an exclamation point: "${kidName}!"\n\nWarning: this will delete the old ${kidName}'s data permanently!`)
+            }
+        })
     }
 }
 

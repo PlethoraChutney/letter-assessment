@@ -55,6 +55,7 @@ function clearHover() {
     while (hoverContainer.firstChild) {
         hoverContainer.removeChild(hoverContainer.firstChild);
     }
+    hoverContainer.classList.remove("missing");
 }
 
 function studentMouseover(e) {
@@ -96,7 +97,7 @@ function setHoverOffset(xCoord, yCoord) {
 function dashboardSquareHover(event) {
     clearHover();
 
-    for (dataType of ['Student', 'Date', 'Target', 'Name', 'Sound', 'Read', 'Lesson']) {
+    for (dataType of ['Student', 'Date', 'Target', 'Name', 'Sound', 'Read']) {
         let dataName = `data-${dataType.toLowerCase()}`;
         if (event.target.hasAttribute(dataName)) {
             let newP = document.createElement('p');
@@ -104,6 +105,20 @@ function dashboardSquareHover(event) {
             hoverContainer.appendChild(newP);
         }
     }
+
+    setHoverOffset(event.pageX, event.pageY);
+
+    hoverContainer.classList.remove('hidden');
+}
+
+
+function dashboardMissingHover(event) {
+    clearHover();
+    hoverContainer.classList.add("missing");
+
+    let newP = document.createElement("p");
+    newP.innerHTML = "Missing result.";
+    hoverContainer.appendChild(newP);
 
     setHoverOffset(event.pageX, event.pageY);
 
@@ -154,8 +169,16 @@ students.forEach(student => {
             newGridSquare.setAttribute('data-target', header);
         }
         newGridSquare.id = `sq-${student}-${header}`;
-
-        let result = studentSuccess['students'][student]['results'][header]['success'];
+        let result;
+        try {
+            result = studentSuccess['students'][student]['results'][header]['success'];
+        } catch (error) {
+            newGridSquare.addEventListener('mouseover', dashboardMissingHover);
+            newGridSquare.addEventListener('mousemove', dashboardSquareMousemove);
+            newGridSquare.addEventListener('mouseleave', dashboardSquareMouseleave);
+            dashboard.appendChild(newGridSquare);
+            continue;
+        }
         if (dashboardType === 'words') {
             result = { 'read': result['name'] };
         }
