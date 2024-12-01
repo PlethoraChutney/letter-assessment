@@ -82,6 +82,12 @@ class Database(object):
         self.save_kid(kid)
         self.save()
 
+    def delete_test(self, kid_name: str, test_type: str, date: str) -> None:
+        kid = self.get_kid(kid_name)
+        kid.del_test(test_type, date)
+        self.save_kid(kid)
+        self.save()
+
     def make_df(self):
         list_of_dicts = []
         for kid_name in self.kids:
@@ -223,6 +229,17 @@ class Kid(object):
         if test_dict is None:
             test_dict = {}
         test_dict[str(date.today())] = new_results
+        setattr(self, f"{test_type}_tests", test_dict)
+
+    def del_test(self, test_type: str, date: str) -> None:
+        assert test_type in self.accepted_test_types, f"Bad test type {test_type}"
+        test_dict = getattr(self, f"{test_type}_tests")
+        if test_dict is None:
+            raise KeyError(f"{self.name} has no tests of type {test_type}")
+        assert date in test_dict, f"{date} not in {test_type} tests"
+        del test_dict[date]
+        new_max = max(list(test_dict.keys()))
+        self.latest_tests[test_type] = new_max
         setattr(self, f"{test_type}_tests", test_dict)
 
 
