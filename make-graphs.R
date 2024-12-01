@@ -97,12 +97,12 @@ table_data |>
   fmt_number(
     "Words.Success",
     decimals = 0,
-    pattern = "{x}/30"
+    pattern = "{x}/15"
   ) |>
   fmt_number(
     "Heart Words.Success",
     decimals = 0,
-    pattern = "{x}/52"
+    pattern = "{x}/36"
   ) |>
   tab_options(
     row_group.border.top.width = 2,
@@ -142,14 +142,14 @@ table_data |>
     na_color = "#EFEFEF",
     columns = "Words.Success",
     palette = "Blues",
-    domain = 0:30
+    domain = 0:15
   ) |>
   data_color(
     method = "numeric",
     na_color = "#EFEFEF",
     columns = "Heart Words.Success",
     palette = "Blues",
-    domain = 0:52
+    domain = 0:36
   ) |>
   sub_missing() |>
   opt_css(
